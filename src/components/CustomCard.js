@@ -1,51 +1,52 @@
 import React from 'react';
+import CheckIcon from '@mui/icons-material/Check';
+import RoundedButton from "./RoundedButton";
+
 import {
-    Card,
-    CardHeader,
-    CardMedia,
-    CardContent,
-    CardActions,
-    Typography,
-    Button
-} from '@mui/material';
+    StyledCard,
+    StyledCardHeader,
+    StyledHeaderContentDivider,
+    StyledCardContent,
+    StyledContentActionsDivider,
+    StyledCardActions,
+} from './CustomCard.style';
 
 const CustomCard = ({
-                                 title,
-                                 content,
-                                 actions = [],
-                                 onClick
-                             }) => {
+                        title = null,
+                        content = null,
+                        label= null,
+                        width = 'auto',
+                        height = 'auto',
+                        onClick = () => {}
+                    }) => {
     return (
-        <Card sx={{ maxWidth: 345, borderRadius: 3, boxShadow: 3 }} onClick={onClick}>
+        <StyledCard width={width} height={height} onClick={onClick}>
             {title && (
-                <CardHeader
-                    title={title}
-                />
+                <StyledCardHeader title={title} />
             )}
+
+            <StyledHeaderContentDivider />
 
             {content && (
-                <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                        {content}
-                    </Typography>
-                </CardContent>
+                <StyledCardContent>
+                    {content}
+                </StyledCardContent>
             )}
 
-            {actions.length > 0 && (
-                <CardActions>
-                    {actions.map((action, index) => (
-                        <Button
-                            key={index}
-                            size="small"
-                            onClick={action.onClick}
-                            color={action.color || 'primary'}
-                        >
-                            {action.label}
-                        </Button>
-                    ))}
-                </CardActions>
-            )}
-        </Card>
+            <StyledContentActionsDivider />
+
+            <StyledCardActions>
+                <RoundedButton
+                    label={label}
+                    width="80px"
+                    height="48px"
+                    state="disable"
+                    onClick={onClick}
+                    icon={<CheckIcon sx={{ fontSize: 20, marginRight: 1 }} />}
+                />
+            </StyledCardActions>
+
+        </StyledCard>
     );
 };
 
