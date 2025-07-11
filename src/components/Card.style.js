@@ -33,7 +33,6 @@ export const StyledHeaderContentDivider = styled(Divider)({
 
 export const StyledCardContent = styled(CardContent)({
     flexGrow: 1,
-    padding: '15px 20px',
 });
 
 export const StyledContentActionsDivider = styled(Divider)({
