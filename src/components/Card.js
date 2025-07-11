@@ -9,9 +9,9 @@ import {
     StyledCardContent,
     StyledContentActionsDivider,
     StyledCardActions,
-} from './CustomCard.style';
+} from './Card.style';
 
-const CustomCard = ({
+const Card = ({
                         title = null,
                         content = null,
                         label= null,
@@ -50,4 +50,4 @@ const CustomCard = ({
     );
 };
 
-export default CustomCard;
+export default Card;
