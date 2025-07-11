@@ -14,10 +14,11 @@ const StyledButton = styled(Button, {
     letterSpacing: '0.1px',
     lineHeight: '20px',
     textTransform: 'none',
-    color: '#fff',
+    color: 'white',
     backgroundColor: isEnabled ? '#143d60' : '#5f8bb0',
-    '&:hover': {
-        backgroundColor: isEnabled ? '#0f2e48' : '#4a79ad',
+
+    '&.Mui-disabled': {
+        color: 'white',
     },
 }));
 
