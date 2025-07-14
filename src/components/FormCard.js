@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomCard from './CustomCard'; // CustomCard 계속 사용
+import CustomCard from './Card/CustomCard'
 import { IconButton, InputAdornment } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 

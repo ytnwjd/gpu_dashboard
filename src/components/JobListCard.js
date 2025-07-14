@@ -4,7 +4,7 @@ import { TableRow } from '@mui/material';
 import {
     StyledCardHeader,
     StyledHeaderContentDivider,
-} from './CustomCard.style';
+} from './Card/CustomCard.style'
 
 import {
     StyledCard,

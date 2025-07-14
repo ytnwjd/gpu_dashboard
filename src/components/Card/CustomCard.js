@@ -1,6 +1,6 @@
 import React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
-import RoundedButton from "./RoundedButton";
+import RoundedButton from '../Button/RoundedButton';
 
 import {
     StyledCard,
