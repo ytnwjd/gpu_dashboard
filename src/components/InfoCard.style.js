@@ -16,6 +16,21 @@ export const StyledInfoContentWrapper = styled(Box)({
     gap: '20px',
 });
 
+export const StyledLeftContent = styled(Box)({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    marginLeft: '50px',
+});
+
+export const StyledAvailableGpuText = styled(Typography)({
+    color: '#143D60',
+    fontSize: '1.25rem',
+    marginBottom: '10px',
+});
+
 export const StyledGpuGridContainer = styled(Box)({
     display: 'grid',
     gridTemplateColumns: 'repeat(6, 1fr)',

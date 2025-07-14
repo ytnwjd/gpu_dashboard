@@ -4,6 +4,8 @@ import CustomCard from './Card/CustomCard';
 import {
     StyledGpuIcon,
     StyledInfoContentWrapper,
+    StyledLeftContent,
+    StyledAvailableGpuText,
     StyledGpuGridContainer,
     StyledTextContainer,
     StyledInfoTypography,
@@ -22,9 +24,14 @@ const InfoCard = () => {
 
     const cardContent = (
         <StyledInfoContentWrapper>
-            <StyledGpuGridContainer>
-                {gpuIcons}
-            </StyledGpuGridContainer>
+            <StyledLeftContent>
+                <StyledAvailableGpuText variant="h6">
+                    Available GPU
+                </StyledAvailableGpuText>
+                <StyledGpuGridContainer>
+                    {gpuIcons}
+                </StyledGpuGridContainer>
+            </StyledLeftContent>
 
             <StyledTextContainer>
                 <StyledInfoTypography variant="body1">
