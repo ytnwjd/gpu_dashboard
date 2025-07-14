@@ -41,8 +41,8 @@ const CustomCard = ({
                         <RoundedButton
                             label={label}
                             width="80px"
-                            height="48px"
-                            state="disable"
+                            height="40px"
+                            state="enable"
                             onClick={onClick}
                             icon={<CheckIcon sx={{ fontSize: 20, marginRight: 1 }} />}
                         />
