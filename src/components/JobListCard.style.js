@@ -16,13 +16,14 @@ export const StyledCard = styled(Card)(({ width, height, onClick }) => ({
     height: height || 'auto',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: "#0A1A2",
+    backgroundColor: "#0A1A28",
     borderRadius: '20px',
     boxShadow: 3,
     cursor: onClick ? 'pointer' : 'default',
 }));
 
 export const StyledCardContent = styled(CardContent)(() => ({
+    backgroundColor: "#0A1A28",
     flexGrow: 1,
     padding: 0,
     display: 'flex',
@@ -38,11 +39,13 @@ export const StyledCardContent = styled(CardContent)(() => ({
 
 export const StyledTableContainer = styled(Box)({
     width: '100%',
-    overflowX: 'auto',
+    height: '100%',
+    overflowY: 'auto',
 });
 
 export const StyledTable = styled(Table)({
-
+    minWidth: 650,
+    tableLayout: 'fixed',
 });
 
 export const StyledTableHead = styled(TableHead)({
@@ -84,4 +87,14 @@ export const StyledBodyTableCell = styled(TableCell)(({ theme }) => ({
     fontFamily: theme.typography.fontFamily,
     padding: '8px 12px',
     borderBottom: '1px solid #3C4756',
+    textAlign: 'center',
 }));
+
+export const StyledTextButton = styled(Typography)({
+    color: '#E5F3A3',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    '&:hover': {
+        color: '#FFFF00',
+    },
+});

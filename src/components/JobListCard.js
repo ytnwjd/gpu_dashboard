@@ -1,6 +1,5 @@
 import React from 'react';
-import { TableRow } from '@mui/material';
-
+import { TableRow, Typography } from '@mui/material';
 import {
     StyledCardHeader,
     StyledHeaderContentDivider,
@@ -18,16 +17,24 @@ import {
     StyledMessageTableCell,
     StyledMessageTypography,
     StyledBodyTableCell,
+    StyledTextButton,
 } from './JobListCard.style';
 
 const JobListCard = () => {
-    const jobList = [];
+    const jobList = [
+        { id: '1', timestamp: '2025-07-14 10:00:00', jobName: 'My first GPU job', showLogs: 'View Logs' },
+        { id: '2', timestamp: '2025-07-14 10:15:30', jobName: 'Deep Learning Model Training', showLogs: 'View Logs' }
+    ];
 
     const headers = [
         { id: "timestamp", label: "Time Stamp", width: 220 },
         { id: "jobName", label: "Job Name", flex: 1 },
         { id: "showLogs", label: "show logs", width: 170 },
     ];
+
+    const handleShowLogsClick = (jobId) => {
+        console.log(`Show logs for job ID: ${jobId}`);
+    };
 
     return (
         <StyledCard width='750px' height='320px'>
@@ -62,7 +69,14 @@ const JobListCard = () => {
                                     <TableRow key={job.id}>
                                         <StyledBodyTableCell>{job.timestamp}</StyledBodyTableCell>
                                         <StyledBodyTableCell>{job.jobName}</StyledBodyTableCell>
-                                        <StyledBodyTableCell>{/* show logs btn */}</StyledBodyTableCell>
+                                        <StyledBodyTableCell>
+                                            <StyledTextButton
+                                                variant="body2"
+                                                onClick={() => handleShowLogsClick(job.id)}
+                                            >
+                                                show logs
+                                            </StyledTextButton>
+                                        </StyledBodyTableCell>
                                     </TableRow>
                                 ))
                             )}
