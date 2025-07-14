@@ -22,8 +22,13 @@ import {
 
 const JobListCard = () => {
     const jobList = [
-        { id: '1', timestamp: '2025-07-14 10:00:00', jobName: 'My first GPU job', showLogs: 'View Logs' },
-        { id: '2', timestamp: '2025-07-14 10:15:30', jobName: 'Deep Learning Model Training', showLogs: 'View Logs' }
+        { id: '1', timestamp: '2025-07-14 10:00:00', jobName: 'My first GPU job' },
+        { id: '2', timestamp: '2025-07-14 10:15:30', jobName: 'Deep Learning Model Training'},
+        { id: '3', timestamp: '2025-07-15 10:15:30', jobName: 'Deep Learning'},
+        { id: '5', timestamp: '2025-07-16 10:15:30', jobName: 'Deep Learning'},
+        { id: '6', timestamp: '2025-07-17 10:15:30', jobName: 'Deep Learning'},
+        { id: '7', timestamp: '2025-07-18 10:15:30', jobName: 'Deep Learning'},
+        { id: '8', timestamp: '2025-07-19 10:15:30', jobName: 'Deep Learning'}
     ];
 
     const headers = [
