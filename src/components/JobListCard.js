@@ -1,5 +1,5 @@
-import React from 'react';
-import { TableRow, Typography } from '@mui/material';
+import React, {useState} from 'react';
+import { TableRow } from '@mui/material';
 import {
     StyledCardHeader,
     StyledHeaderContentDivider,
@@ -20,6 +20,8 @@ import {
     StyledTextButton,
 } from './JobListCard.style';
 
+import LogViewerDrawer from "./Modal/LogViewerDrawer";
+
 const JobListCard = () => {
     const jobList = [
         { id: '1', timestamp: '2025-07-14 10:00:00', jobName: 'My first GPU job' },
@@ -37,8 +39,24 @@ const JobListCard = () => {
         { id: "showLogs", label: "show logs", width: 170 },
     ];
 
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [currentJobLogs, setCurrentJobLogs] = useState([]);
+    const [currentJobName, setCurrentJobName] = useState('');
+
     const handleShowLogsClick = (jobId) => {
+        const job = jobList.find(j => j.id === jobId);
+        if (job) {
+            setCurrentJobLogs(job.logs || []);
+            setCurrentJobName(job.jobName);
+            setDrawerOpen(true);
+        }
         console.log(`Show logs for job ID: ${jobId}`);
+    };
+
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+        setCurrentJobLogs([]);
+        setCurrentJobName('');
     };
 
     return (
@@ -89,6 +107,13 @@ const JobListCard = () => {
                     </StyledTable>
                 </StyledTableContainer>
             </StyledCardContent>
+
+            <LogViewerDrawer
+                open={drawerOpen}
+                onClose={handleDrawerClose}
+                jobName={currentJobName}
+                logs={currentJobLogs}
+            />
         </StyledCard>
     );
 }
