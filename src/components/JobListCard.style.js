@@ -16,14 +16,12 @@ export const StyledCard = styled(Card)(({ width, height, onClick }) => ({
     height: height || 'auto',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: "#0A1A28",
     borderRadius: '10px',
     boxShadow: 3,
     cursor: onClick ? 'pointer' : 'default',
 }));
 
 export const StyledCardContent = styled(CardContent)(() => ({
-    backgroundColor: "#0A1A28",
     flexGrow: 1,
     padding: 0,
     display: 'flex',
@@ -53,8 +51,7 @@ export const StyledTableHead = styled(TableHead)({
 });
 
 export const StyledHeaderTableCell = styled(TableCell)(({ theme }) => ({
-    backgroundColor: '#0A1A28',
-    color: 'white',
+    color: '#0A1A28',
     fontWeight: 'bold',
     padding: '8px 12px',
     textAlign: 'center',
@@ -67,15 +64,13 @@ export const StyledTableRow = styled(TableRow)({
 });
 
 export const StyledTableBody = styled(TableBody)({
-    backgroundColor: '#0A1A28',
-    color: 'white',
+    color: '#0A1A28',
 });
 
 export const StyledMessageTableCell = styled(TableCell)(({ theme }) => ({
     textAlign: 'center',
     paddingTop: theme.spacing(13),
     paddingBottom: theme.spacing(13),
-    color: 'white',
 }));
 
 export const StyledMessageTypography = styled(Typography)(({ theme }) => ({
@@ -83,18 +78,17 @@ export const StyledMessageTypography = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledBodyTableCell = styled(TableCell)(({ theme }) => ({
-    color: 'white',
+    color: '#0A1A28',
     fontFamily: theme.typography.fontFamily,
-    padding: '8px 12px',
-    borderBottom: '1px solid #3C4756',
+    padding: '2px 8px',
     textAlign: 'center',
 }));
 
 export const StyledTextButton = styled(Typography)({
-    color: '#E5F3A3',
+    color: '#0A1A28',
     cursor: 'pointer',
     textDecoration: 'underline',
     '&:hover': {
-        color: '#FFFF00',
+        color: 'black',
     },
 });
