@@ -1,18 +1,9 @@
 import { styled } from '@mui/material/styles';
 import { Box, Typography } from '@mui/material';
 
-export const StyledGpuIcon = styled(Box)(({ active }) => ({
-    width: '24px',
-    height: '32px',
-    backgroundColor: active ? '#A0C878' : '#D9D9D9',
-}));
-
 export const StyledInfoContentWrapper = styled(Box)({
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
+    padding: '20px',
     gap: '20px',
 });
 
@@ -20,36 +11,58 @@ export const StyledLeftContent = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    marginLeft: '50px',
 });
 
 export const StyledAvailableGpuText = styled(Typography)({
     color: '#143D60',
     fontSize: '1.25rem',
     marginBottom: '10px',
+    fontWeight: 'bold',
+});
+
+export const StyledGpuGroupWrapper = styled(Box)({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    marginBottom: '10px',
+});
+
+export const StyledGpuLabel = styled(Typography)({
+    color: '#143D60',
+    width: '50px',
+    paddingRight: '8px',
+    textAlign: 'right',
+    flexShrink: 0,
 });
 
 export const StyledGpuGridContainer = styled(Box)({
     display: 'grid',
     gridTemplateColumns: 'repeat(6, 1fr)',
-    gap: '4px 4px',
-    width: 'auto',
-    minWidth: '200px',
-    paddingLeft: '10px',
+    gap: '10px',
+    width: 'calc(10px * 6 + 40px * 6)',
 });
 
-export const StyledTextContainer = styled(Box)({
-    flexGrow: 1,
-    textAlign: 'center',
-});
-
-export const StyledInfoTypography = styled(Typography)(({ theme }) => ({
-    color: '#143D60',
-    fontFamily: theme.typography.fontFamily,
+export const StyledGpuIcon = styled(Box)(({ active }) => ({
+    width: '24px',
+    height: '32px',
+    backgroundColor: active ? '#A0C878' : '#F84C4C',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '0.8rem',
+    fontWeight: 'bold',
 }));
 
-export const StyledInfoTypographyWithMargin = styled(StyledInfoTypography)({
-    marginTop: '8px',
+export const StyledTextContainer = styled(Box)({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    paddingTop: '25px',
+    flexGrow: 1,
+});
+
+export const StyledInfoTypography = styled(Typography)({
+    color: '#143D60',
 });

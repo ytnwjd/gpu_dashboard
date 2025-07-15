@@ -9,37 +9,61 @@ import {
     StyledGpuGridContainer,
     StyledTextContainer,
     StyledInfoTypography,
-    StyledInfoTypographyWithMargin
+    StyledGpuGroupWrapper,
+    StyledGpuLabel,
 } from './InfoCard.style';
 
 const InfoCard = () => {
-    const totalGpuSlots = 18;
-    const activeGpuCount = 7;
+    // GPU 구성
+    const gpu24gbTotal = 6;
+    const gpu8gbTotal = 12;
+
+    const activeGpu24gb = 5;
+    const activeGpu8gb = 1;
+
     const jobsInQueue = 0;
     const availableSlot = jobsInQueue + 1;
 
-    const gpuIcons = Array.from({ length: totalGpuSlots }, (_, index) => (
-        <StyledGpuIcon key={index} active={index < activeGpuCount} />
+    const gpu24gbIcons = Array.from({ length: gpu24gbTotal }, (_, index) => (
+        <StyledGpuIcon key={`24gb-${index}`} active={index < activeGpu24gb} />
+    ));
+
+    const gpu8gbIcons = Array.from({ length: gpu8gbTotal }, (_, index) => (
+        <StyledGpuIcon key={`8gb-${index}`} active={index < activeGpu8gb} />
     ));
 
     const cardContent = (
         <StyledInfoContentWrapper>
             <StyledLeftContent>
-                <StyledAvailableGpuText variant="h6">
+                <StyledAvailableGpuText variant="h6" sx={{ paddingLeft: '50px' }}>
                     Available GPU
                 </StyledAvailableGpuText>
-                <StyledGpuGridContainer>
-                    {gpuIcons}
-                </StyledGpuGridContainer>
+
+                <StyledGpuGroupWrapper>
+                    <StyledGpuLabel variant="body2">24GB</StyledGpuLabel>
+                    <StyledGpuGridContainer>
+                        {gpu24gbIcons}
+                    </StyledGpuGridContainer>
+                </StyledGpuGroupWrapper>
+
+                <StyledGpuGroupWrapper>
+                    <StyledGpuLabel variant="body2">8GB</StyledGpuLabel>
+                    <StyledGpuGridContainer>
+                        {gpu8gbIcons}
+                    </StyledGpuGridContainer>
+                </StyledGpuGroupWrapper>
             </StyledLeftContent>
 
             <StyledTextContainer>
                 <StyledInfoTypography variant="body1">
-                    내 앞에 {jobsInQueue}개의 job이 대기중입니다.
+                    사용 중인 24GB GPU 개수: {activeGpu24gb}/{gpu24gbTotal}
                 </StyledInfoTypography>
-                <StyledInfoTypographyWithMargin variant="body1">
-                    {availableSlot}번째로 GPU 사용이 가능합니다.
-                </StyledInfoTypographyWithMargin>
+                <StyledInfoTypography variant="body1">
+                    사용 중인 8GB GPU 개수: {activeGpu8gb}/{gpu8gbTotal}
+                </StyledInfoTypography>
+                <StyledInfoTypography variant="body1">
+                    현재 {jobsInQueue}개의 job이 대기 중입니다.
+                </StyledInfoTypography>
             </StyledTextContainer>
         </StyledInfoContentWrapper>
     );
