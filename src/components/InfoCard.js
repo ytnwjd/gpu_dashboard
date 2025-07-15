@@ -73,7 +73,7 @@ const InfoCard = () => {
             title="Wait Information"
             content={cardContent}
             width='740px'
-            height='320px'
+            height='290px'
         />
     );
 }

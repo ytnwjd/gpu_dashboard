@@ -12,7 +12,6 @@ import {
     StyledTable,
     StyledTableHead,
     StyledHeaderTableCell,
-    StyledTableRow,
     StyledTableBody,
     StyledMessageTableCell,
     StyledMessageTypography,
@@ -60,7 +59,7 @@ const JobListCard = () => {
     };
 
     return (
-        <StyledCard width='750px' height='320px'>
+        <StyledCard width='740px' height='400px'>
             <StyledCardHeader title="GPU Job 실행 리스트" />
             <StyledHeaderContentDivider />
             <StyledCardContent>

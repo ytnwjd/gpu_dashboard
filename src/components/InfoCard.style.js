@@ -3,8 +3,7 @@ import { Box, Typography } from '@mui/material';
 
 export const StyledInfoContentWrapper = styled(Box)({
     display: 'flex',
-    padding: '20px',
-    gap: '20px',
+    padding: '10px 20px 20px 20px',
 });
 
 export const StyledLeftContent = styled(Box)({

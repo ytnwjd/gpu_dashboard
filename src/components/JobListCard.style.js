@@ -17,7 +17,7 @@ export const StyledCard = styled(Card)(({ width, height, onClick }) => ({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: "#0A1A28",
-    borderRadius: '20px',
+    borderRadius: '10px',
     boxShadow: 3,
     cursor: onClick ? 'pointer' : 'default',
 }));

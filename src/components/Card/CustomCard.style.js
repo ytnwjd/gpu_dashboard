@@ -13,15 +13,15 @@ export const StyledCard = styled(Card)(({ width, height }) => ({
     display: "flex",
     flexDirection: "column",
     backgroundColor: "#fefefe",
-    borderRadius: "20px",
+    borderRadius: "10px",
     boxShadow: 3,
 }));
 
 export const StyledCardHeader = styled(CardHeader)({
     backgroundColor: "#E5F3A3",
     padding: '12px 30px',
-    borderTopLeftRadius: '20px',
-    borderTopRightRadius: '20px',
+    borderTopLeftRadius: '10px',
+    borderTopRightRadius: '10px',
 });
 
 export const StyledHeaderContentDivider = styled(Divider)({
