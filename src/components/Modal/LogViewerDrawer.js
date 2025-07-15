@@ -24,9 +24,9 @@ const LogViewerDrawer = ({ open, onClose, jobName, logs }) => {
         >
             <StyledDrawerHeader>
                 <StyledDrawerTitle variant="h6">
-                    {jobName} logs
+                    [{jobName}] logs
                 </StyledDrawerTitle>
-                <IconButton onClick={onClose} sx={{ color: 'white' }}>
+                <IconButton onClick={onClose} sx={{ color: '#0A1A28' }}>
                     <CloseIcon />
                 </IconButton>
             </StyledDrawerHeader>
@@ -39,7 +39,7 @@ const LogViewerDrawer = ({ open, onClose, jobName, logs }) => {
                         </StyledLogLine>
                     ))
                 ) : (
-                    <Typography variant="body2" sx={{ color: 'white', padding: '20px' }}>
+                    <Typography variant="body1" sx={{ color: 'white', padding: '15px' }}>
                         로그 내용이 없습니다.
                     </Typography>
                 )}
