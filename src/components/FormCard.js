@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CustomCard from './Card/CustomCard'
 import { IconButton, InputAdornment } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
@@ -8,15 +8,35 @@ import {
     StyledTextField
 } from './FormCard.style';
 
+import ConfirmModal from './Modal/ConfirmModal';
+
 const FormCard = () => {
 
-    const [jobName, setJobName] = React.useState('first job');
-    const [projectPath, setProjectPath] = React.useState('/home/workspace');
-    const [venvPath, setVenvPath] = React.useState('/home/workspace/.venv');
-    const [mainFile, setMainFile] = React.useState('/home/workspace/index.py');
+    const [jobName, setJobName] = useState('first job');
+    const [projectPath, setProjectPath] = useState('/home/workspace');
+    const [venvPath, setVenvPath] = useState('/home/workspace/.venv');
+    const [mainFile, setMainFile] = useState('/home/workspace/index.py');
+
+    const [openModal, setOpenModal] = useState(false);
+    const [pendingJobsCount, setPendingJobsCount] = useState(7);
 
     const handleClear = (setter) => () => {
         setter('');
+    };
+
+    const handleSaveButtonClick = () => {
+        setOpenModal(true);
+    };
+
+    const handleConfirm = () => {
+        console.log("job 제출");
+        // 실제 Job 제출 로직 (API 호출 등)
+        setOpenModal(false);
+    };
+
+    const handleCancel = () => {
+        console.log("Job 제출 취소");
+        setOpenModal(false);
     };
 
     const formContent = (
@@ -113,13 +133,23 @@ const FormCard = () => {
     );
 
     return (
-        <CustomCard
-            title="GPU 사용 신청"
-            content={formContent}
-            label="저장"
-            width='420px'
-            height='570px'
-        />
+        <>
+            <CustomCard
+                title="GPU 사용 신청"
+                content={formContent}
+                label="저장"
+                width='420px'
+                height='570px'
+                onButtonClick={handleSaveButtonClick}
+            />
+
+            <ConfirmModal
+                open={openModal}
+                onClose={handleCancel}
+                onConfirm={handleConfirm}
+                pendingJobsCount={pendingJobsCount}
+            />
+        </>
     );
 }
 
