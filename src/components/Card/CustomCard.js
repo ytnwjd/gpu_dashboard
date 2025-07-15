@@ -17,10 +17,10 @@ const CustomCard = ({
                         label= null,
                         width = 'auto',
                         height = 'auto',
-                        onClick = () => {}
+                        onButtonClick = () => {}
                     }) => {
     return (
-        <StyledCard width={width} height={height} onClick={onClick}>
+        <StyledCard width={width} height={height}>
             {title && (
                 <StyledCardHeader title={title} />
             )}
@@ -43,7 +43,7 @@ const CustomCard = ({
                             width="80px"
                             height="40px"
                             state="enable"
-                            onClick={onClick}
+                            onClick={onButtonClick}
                             icon={<CheckIcon sx={{ fontSize: 20, marginRight: 1 }} />}
                         />
                     </StyledCardActions>

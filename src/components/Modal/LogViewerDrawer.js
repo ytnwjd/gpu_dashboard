@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, Box, IconButton, Typography } from '@mui/material';
+import { Drawer, IconButton, Typography } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 
 import {
