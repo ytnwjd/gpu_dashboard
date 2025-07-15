@@ -32,6 +32,8 @@ const JobListCard = () => {
         { id: '8', timestamp: '2025-07-19 10:15:30', jobName: 'Deep Learning'}
     ];
 
+    const latestJobId = jobList.length > 0 ? jobList[jobList.length - 1].id : null;
+
     const headers = [
         { id: "timestamp", label: "Time Stamp", width: 220 },
         { id: "jobName", label: "Job Name", flex: 1 },
@@ -92,12 +94,14 @@ const JobListCard = () => {
                                         <StyledBodyTableCell>{job.timestamp}</StyledBodyTableCell>
                                         <StyledBodyTableCell>{job.jobName}</StyledBodyTableCell>
                                         <StyledBodyTableCell>
-                                            <StyledTextButton
-                                                variant="body2"
-                                                onClick={() => handleShowLogsClick(job.id)}
-                                            >
-                                                show logs
-                                            </StyledTextButton>
+                                            {job.id === latestJobId && (
+                                                <StyledTextButton
+                                                    variant="body2"
+                                                    onClick={() => handleShowLogsClick(job.id)}
+                                                >
+                                                    show logs
+                                                </StyledTextButton>
+                                            )}
                                         </StyledBodyTableCell>
                                     </TableRow>
                                 ))
