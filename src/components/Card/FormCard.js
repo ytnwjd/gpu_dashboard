@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import CustomCard from './Card/CustomCard'
+import CustomCard from './CustomCard'
 import { IconButton, InputAdornment } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 
@@ -8,7 +8,7 @@ import {
     StyledTextField
 } from './FormCard.style';
 
-import ConfirmModal from './Modal/ConfirmModal';
+import ConfirmModal from '../Modal/ConfirmModal';
 
 const FormCard = () => {
 

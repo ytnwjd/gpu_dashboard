@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import JobListCard from "../components/JobListCard";
-import InfoCard from "../components/InfoCard";
-import FormCard from "../components/FormCard";
+import JobListCard from "../components/Card/JobListCard";
+import InfoCard from "../components/Card/InfoCard";
+import FormCard from "../components/Card/FormCard";
 import { Check as CheckIcon, PlayArrow as PlayArrowIcon } from '@mui/icons-material';
 import RoundedButton from "../components/Button/RoundedButton";
 

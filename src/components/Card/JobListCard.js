@@ -3,7 +3,7 @@ import { TableRow } from '@mui/material';
 import {
     StyledCardHeader,
     StyledHeaderContentDivider,
-} from './Card/CustomCard.style'
+} from './CustomCard.style'
 
 import {
     StyledCard,
@@ -19,7 +19,7 @@ import {
     StyledTextButton,
 } from './JobListCard.style';
 
-import LogViewerDrawer from "./Modal/LogViewerDrawer";
+import LogViewerDrawer from "../Modal/LogViewerDrawer";
 
 const JobListCard = () => {
     const jobList = [
