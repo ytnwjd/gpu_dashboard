@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { TableRow } from '@mui/material';
 import {
     StyledCardHeader,
@@ -22,15 +22,24 @@ import {
 import LogViewerDrawer from "../Modal/LogViewerDrawer";
 
 const JobListCard = () => {
-    const jobList = [
-        { id: '1', timestamp: '2025-07-14 10:00:00', jobName: 'My first GPU job' },
-        { id: '2', timestamp: '2025-07-14 10:15:30', jobName: 'Deep Learning Model Training'},
-        { id: '3', timestamp: '2025-07-15 10:15:30', jobName: 'Deep Learning'},
-        { id: '5', timestamp: '2025-07-16 10:15:30', jobName: 'Deep Learning'},
-        { id: '6', timestamp: '2025-07-17 10:15:30', jobName: 'Deep Learning'},
-        { id: '7', timestamp: '2025-07-18 10:15:30', jobName: 'Deep Learning'},
-        { id: '8', timestamp: '2025-07-19 10:15:30', jobName: 'Deep Learning'}
-    ];
+    const [jobList, setJobList] = useState([]);
+
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/api/jobs');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setJobList(data);
+            } catch (error) {
+                console.error("Failed to fetch jobs:", error);
+            }
+        };
+
+        fetchJobs();
+    }, []);
 
     const latestJobId = jobList.length > 0 ? jobList[jobList.length - 1].id : null;
 
