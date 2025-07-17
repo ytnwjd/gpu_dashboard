@@ -31,8 +31,8 @@ const JobListCard = () => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
-                setJobList(data);
+                const jobs = await response.json();
+                setJobList(jobs.data);
             } catch (error) {
                 console.error("Failed to fetch jobs:", error);
             }
