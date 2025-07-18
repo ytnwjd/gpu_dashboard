@@ -64,8 +64,7 @@ const JobListCard = () => {
         { id: "timestamp", label: "Time Stamp", width: 160 },
         { id: "jobName", label: "Job Name", flex: 1 },
         { id: "status", label: "Status", width: 60 },
-        { id: "actions", label: "Actions", width: 100 },
-        { id: "showLogs", label: "show logs", width: 100 },
+        { id: "actions", label: "Actions", width: 150 },
     ];
 
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -195,7 +194,7 @@ const JobListCard = () => {
                                         <StyledBodyTableCell>{job.timestamp}</StyledBodyTableCell>
                                         <StyledBodyTableCell>{job.jobName}</StyledBodyTableCell>
                                         <StyledBodyTableCell>{job.status}</StyledBodyTableCell>
-                                        <StyledBodyTableCell>
+                                        <StyledBodyTableCell sx={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center'}}> 
                                             {job.status === "대기" && (
                                                 <StyledTextButton
                                                     variant="body2"
@@ -214,9 +213,7 @@ const JobListCard = () => {
                                                     작업 삭제
                                                 </StyledTextButton>
                                             )}
-                                        </StyledBodyTableCell>
-                                        <StyledBodyTableCell>
-                                            {job.id === latestJobId && (
+                                            {((job.id === latestJobId || job.status === "실행 중") && job.status !== "대기") && (
                                                 <StyledTextButton
                                                     variant="body2"
                                                     onClick={() => handleShowLogsClick(job.id)}
@@ -225,6 +222,7 @@ const JobListCard = () => {
                                                 </StyledTextButton>
                                             )}
                                         </StyledBodyTableCell>
+                                    
                                     </TableRow>
                                 ))
                             )}
