@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import { TableRow } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { TableRow, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import {
     StyledCardHeader,
     StyledHeaderContentDivider,
@@ -20,26 +21,30 @@ import {
 } from './JobListCard.style';
 
 import LogViewerDrawer from "../Modal/LogViewerDrawer";
+import EditJobFormModal from "../Modal/EditJobFormModal";
 
 const JobListCard = () => {
     const [jobList, setJobList] = useState([]);
 
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [jobToEdit, setJobToEdit] = useState(null); // 수정할 Job의 데이터
+
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await fetch('/api/jobs'); 
+                const response = await fetch('/api/jobs');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const responseData = await response.json(); 
-                
+                const responseData = await response.json();
+
                 if (responseData.code === 200 && responseData.data) {
                     const jobs = responseData.data;
                     console.log(jobs);
                     setJobList(jobs);
                 } else {
                     console.error("API response error:", responseData.message);
-                    setJobList([]); 
+                    setJobList([]);
                 }
             } catch (error) {
                 console.error("Failed to fetch jobs:", error);
@@ -49,7 +54,7 @@ const JobListCard = () => {
 
         fetchJobs();
 
-        const intervalId = setInterval(fetchJobs, 5000); 
+        const intervalId = setInterval(fetchJobs, 5000);
         return () => clearInterval(intervalId);
     }, []);
 
@@ -84,15 +89,76 @@ const JobListCard = () => {
     };
 
     const handleEditJob = (jobId) => {
+        const job = jobList.find(j => j.id === jobId);
+        if (job) {
+            setJobToEdit(job); // 수정할 Job 데이터를 상태에 저장
+            setEditModalOpen(true);
+        }
         console.log(`Edit job with ID: ${jobId}`);
-    
-        alert(`${jobId}번 작업 수정`);
+    };
+
+    const handleEditModalClose = () => {
+        setEditModalOpen(false);
+        setJobToEdit(null); // 모달 닫을 때 데이터 초기화
+    };
+
+    const handleEditFormSubmit = async (formData) => {
+        if (!jobToEdit) return;
+
+        console.log(`Submitting edit for job ID: ${jobToEdit.id}`, formData);
+
+        try {
+            const response = await fetch(`/api/jobs/${jobToEdit.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok && responseData.code === 200) {
+                alert(`작업 ID: ${jobToEdit.id} 수정 성공!`);
+                handleEditModalClose();
+
+                await fetchJobs();
+            } else {
+                alert(`작업 수정 실패: ${responseData.message || '알 수 없는 오류'}`);
+                console.error("Failed to edit job:", responseData.message);
+            }
+        } catch (error) {
+            alert(`작업 수정 중 오류 발생: ${error.message}`);
+            console.error("Error editing job:", error);
+        }
     };
 
     const handleDeleteJob = (jobId) => {
         console.log(`Delete job with ID: ${jobId}`);
-        
+
         alert(`${jobId}번 작업 삭제`);
+    };
+
+    const fetchJobs = async () => {
+        try {
+            const response = await fetch('/api/jobs');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const responseData = await response.json();
+
+            if (responseData.code === 200 && responseData.data) {
+                const jobs = responseData.data;
+                console.log(jobs);
+                setJobList(jobs);
+            } else {
+                console.error("API response error:", responseData.message);
+                setJobList([]);
+            }
+        } catch (error) {
+            console.error("Failed to fetch jobs:", error);
+            setJobList([]);
+        }
     };
 
     return (
@@ -134,7 +200,7 @@ const JobListCard = () => {
                                                 <StyledTextButton
                                                     variant="body2"
                                                     onClick={() => handleEditJob(job.id)}
-                                                    sx={{ whiteSpace: 'nowrap' }} 
+                                                    sx={{ whiteSpace: 'nowrap' }}
                                                 >
                                                     작업 수정
                                                 </StyledTextButton>
@@ -143,7 +209,7 @@ const JobListCard = () => {
                                                 <StyledTextButton
                                                     variant="body2"
                                                     onClick={() => handleDeleteJob(job.id)}
-                                                    sx={{ color: 'red', whiteSpace: 'nowrap' }} 
+                                                    sx={{ color: 'red', whiteSpace: 'nowrap' }}
                                                 >
                                                     작업 삭제
                                                 </StyledTextButton>
@@ -173,6 +239,38 @@ const JobListCard = () => {
                 jobName={currentJobName}
                 logs={currentJobLogs}
             />
+
+            <Dialog
+                open={editModalOpen}
+                onClose={handleEditModalClose}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    작업 수정
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleEditModalClose}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
+                    {jobToEdit && ( // jobToEdit이 있을 때만 폼 렌더링
+                        <EditJobFormModal
+                            initialData={jobToEdit}
+                            onClose={handleEditModalClose}
+                            onSave={handleEditFormSubmit}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
         </StyledCard>
     );
 }
