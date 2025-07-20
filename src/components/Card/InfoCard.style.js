@@ -44,7 +44,7 @@ export const StyledGpuGridContainer = styled(Box)({
 export const StyledGpuIcon = styled(Box)(({ active }) => ({
     width: '24px',
     height: '32px',
-    backgroundColor: active ? '#A0C878' : '#F84C4C',
+    backgroundColor: active ? '#F84C4C' : '#A0C878',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
