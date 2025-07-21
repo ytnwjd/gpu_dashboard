@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import CustomCard from './CustomCard'
+import React, { useState } from 'react';
+import CustomCard from './CustomCard';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 
@@ -10,7 +10,7 @@ import {
 
 import ConfirmModal from '../Modal/ConfirmModal';
 
-const FormCard = () => {
+const FormCard = ({ onJobSubmitSuccess }) => {
 
     const [jobName, setJobName] = useState('first job');
     const [projectPath, setProjectPath] = useState('/home/workspace');
@@ -18,20 +18,98 @@ const FormCard = () => {
     const [mainFile, setMainFile] = useState('/home/workspace/index.py');
 
     const [openModal, setOpenModal] = useState(false);
-    const [pendingJobsCount, setPendingJobsCount] = useState(7);
+    const [gpuStatus, setGpuStatus] = useState({
+        gpu24gbActive: 0,
+        gpu8gbActive: 0,
+        gpu24gbAvailable: 0,
+        gpu8gbAvailable: 0,
+        jobsInQueue: 0,
+    });
 
     const handleClear = (setter) => () => {
         setter('');
     };
 
-    const handleSaveButtonClick = () => {
-        setOpenModal(true);
+    const handleSaveButtonClick = async () => {
+        try {
+            const response = await fetch("/api/gpu", { 
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const result = await response.json();
+
+            if (response.ok && result.code === 200) {
+                setGpuStatus(result.data);
+            } else {
+                console.error("GPU 상태 가져오기 실패:", result.message || "알 수 없는 오류");
+                
+                setGpuStatus({
+                    gpu24gbActive: 0,
+                    gpu8gbActive: 0,
+                    gpu24gbAvailable: 0,
+                    gpu8gbAvailable: 0,
+                    jobsInQueue: 0,
+                });
+            }
+        } catch (error) {
+            console.error("GPU 상태 가져오기 중 네트워크 오류:", error);
+            
+            setGpuStatus({
+                gpu24gbActive: 0,
+                gpu8gbActive: 0,
+                gpu24gbAvailable: 0,
+                gpu8gbAvailable: 0,
+                jobsInQueue: 0,
+            });
+        } finally {
+            setOpenModal(true); // GPU 상태를 가져온 후 모달 open
+        }
     };
 
-    const handleConfirm = () => {
-        console.log("job 제출");
-        // 실제 Job 제출 로직 (API 호출 등)
-        setOpenModal(false);
+    const handleConfirm = async () => {
+        console.log("Job 제출 시도...");
+
+        const jobData = {
+            jobName: jobName,       
+            projectPath: projectPath,
+            venvPath: venvPath,   
+            mainFile: mainFile   
+        };
+
+        try {
+            const response = await fetch("api/jobs/", { 
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(jobData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.code === 200) {
+                console.log("Job 생성 성공:", result.message, "Job ID:", result.data.id);
+                setOpenModal(false);
+                if (onJobSubmitSuccess) {
+                    onJobSubmitSuccess(result.message);
+                }
+            } else {
+                const errorMessage = result.message || `Job 생성에 실패했습니다. (코드: ${result.code})`;
+                console.error("Job 생성 실패:", errorMessage);
+                setOpenModal(false);
+                if (onJobSubmitSuccess) {
+                    onJobSubmitSuccess(errorMessage);
+                }
+            }
+        } catch (error) {
+            console.error("Job 생성 중 네트워크 오류 또는 예외 발생:", error);
+            setOpenModal(false);
+            if (onJobSubmitSuccess) {
+                onJobSubmitSuccess("Job 생성 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.");
+            }
+        }
     };
 
     const handleCancel = () => {
@@ -40,7 +118,6 @@ const FormCard = () => {
     };
 
     const formContent = (
-
         <StyledForm>
             <StyledTextField
                 label="job name"
@@ -147,7 +224,7 @@ const FormCard = () => {
                 open={openModal}
                 onClose={handleCancel}
                 onConfirm={handleConfirm}
-                pendingJobsCount={pendingJobsCount}
+                gpuStatus={gpuStatus}
             />
         </>
     );
