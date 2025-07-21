@@ -132,10 +132,30 @@ const JobListCard = () => {
         }
     };
 
-    const handleDeleteJob = (jobId) => {
+    const handleDeleteJob = async (jobId) => { // 함수를 async로 변경
         console.log(`Delete job with ID: ${jobId}`);
-
-        alert(`${jobId}번 작업 삭제`);
+    
+        try {
+            const response = await fetch(`/api/jobs/${jobId}`, { 
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            const result = await response.json();
+    
+            if (response.ok && result.code === 200) {
+                alert(result.message);
+                await fetchJobs();
+            } else {
+                const errorMessage = result.message || `Job 삭제에 실패했습니다. (코드: ${result.code})`;
+                alert(errorMessage); 
+            }
+        } catch (error) {
+            console.error(`Job ${jobId} 삭제 중 오류 발생:`, error);
+            alert(`Job ${jobId} 삭제 중 오류가 발생했습니다.`);
+        }
     };
 
     const fetchJobs = async () => {
