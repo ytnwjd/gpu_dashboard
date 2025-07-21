@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TableRow, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { TableRow, Dialog, DialogContent, DialogTitle, IconButton, Typography, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
     StyledCardHeader,
@@ -29,29 +29,32 @@ const JobListCard = () => {
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [jobToEdit, setJobToEdit] = useState(null); // 수정할 Job의 데이터
 
-    useEffect(() => {
-        const fetchJobs = async () => {
-            try {
-                const response = await fetch('/api/jobs');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const responseData = await response.json();
+    const [detailModalOpen, setDetailModalOpen] = useState(false);
+    const [selectedJobDetail, setSelectedJobDetail] = useState(null);
 
-                if (responseData.code === 200 && responseData.data) {
-                    const jobs = responseData.data;
-                    console.log(jobs);
-                    setJobList(jobs);
-                } else {
-                    console.error("API response error:", responseData.message);
-                    setJobList([]);
-                }
-            } catch (error) {
-                console.error("Failed to fetch jobs:", error);
+    const fetchJobs = async () => {
+        try {
+            const response = await fetch('/api/jobs');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const responseData = await response.json();
+
+            if (responseData.code === 200 && responseData.data) {
+                const jobs = responseData.data;
+                console.log(jobs);
+                setJobList(jobs);
+            } else {
+                console.error("API response error:", responseData.message);
                 setJobList([]);
             }
-        };
+        } catch (error) {
+            console.error("Failed to fetch jobs:", error);
+            setJobList([]);
+        }
+    };
 
+    useEffect(() => {
         fetchJobs();
 
         const intervalId = setInterval(fetchJobs, 5000);
@@ -120,7 +123,6 @@ const JobListCard = () => {
             if (response.ok && responseData.code === 200) {
                 alert(`작업 ID: ${jobToEdit.id} 수정 성공!`);
                 handleEditModalClose();
-
                 await fetchJobs();
             } else {
                 alert(`작업 수정 실패: ${responseData.message || '알 수 없는 오류'}`);
@@ -136,7 +138,7 @@ const JobListCard = () => {
         console.log(`Delete job with ID: ${jobId}`);
     
         try {
-            const response = await fetch(`/api/jobs/${jobId}`, { 
+            const response = await fetch(`/api/jobs/${jobId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -158,26 +160,31 @@ const JobListCard = () => {
         }
     };
 
-    const fetchJobs = async () => {
+    const handleRowClick = async (jobId) => {
+        console.log(`Row clicked for job ID: ${jobId}`);
         try {
-            const response = await fetch('/api/jobs');
+            const response = await fetch(`/api/jobs/${jobId}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const responseData = await response.json();
 
             if (responseData.code === 200 && responseData.data) {
-                const jobs = responseData.data;
-                console.log(jobs);
-                setJobList(jobs);
+                setSelectedJobDetail(responseData.data);
+                setDetailModalOpen(true);
             } else {
-                console.error("API response error:", responseData.message);
-                setJobList([]);
+                console.error("Failed to fetch job details:", responseData.message);
+                alert(`Job 상세 정보 불러오기 실패: ${responseData.message || '알 수 없는 오류'}`);
             }
         } catch (error) {
-            console.error("Failed to fetch jobs:", error);
-            setJobList([]);
+            console.error("Error fetching job details:", error);
+            alert(`Job 상세 정보 불러오기 중 오류 발생: ${error.message}`);
         }
+    };
+
+    const handleDetailModalClose = () => {
+        setDetailModalOpen(false);
+        setSelectedJobDetail(null);
     };
 
     return (
@@ -210,11 +217,17 @@ const JobListCard = () => {
                                 </TableRow>
                             ) : (
                                 jobList.map((job) => (
-                                    <TableRow key={job.id}>
+                                    <TableRow
+                                        key={job.id}
+                                        onClick={() => handleRowClick(job.id)}
+                                        sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
+                                    >
                                         <StyledBodyTableCell>{job.timestamp}</StyledBodyTableCell>
                                         <StyledBodyTableCell>{job.jobName}</StyledBodyTableCell>
-                                        <StyledBodyTableCell>{job.status}</StyledBodyTableCell>
-                                        <StyledBodyTableCell sx={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center'}}> 
+                                        <StyledBodyTableCell>{job.status}</StyledBodyTableCell>                                    
+                                        <StyledBodyTableCell sx={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center'}}
+                                            onClick={(e) => e.stopPropagation()} 
+                                        >
                                             {job.status === "대기" && (
                                                 <StyledTextButton
                                                     variant="body2"
@@ -242,7 +255,6 @@ const JobListCard = () => {
                                                 </StyledTextButton>
                                             )}
                                         </StyledBodyTableCell>
-                                    
                                     </TableRow>
                                 ))
                             )}
@@ -280,12 +292,61 @@ const JobListCard = () => {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent dividers>
-                    {jobToEdit && ( // jobToEdit이 있을 때만 폼 렌더링
+                    {jobToEdit && (
                         <EditJobFormModal
                             initialData={jobToEdit}
                             onClose={handleEditModalClose}
                             onSave={handleEditFormSubmit}
                         />
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={detailModalOpen}
+                onClose={handleDetailModalClose}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle sx={{ m: 0, p: 2 }}>
+                    Job 상세 정보
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleDetailModalClose}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
+                    {selectedJobDetail ? (
+                        <Box sx={{ p: 2 }}>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>타임스탬프:</strong> {selectedJobDetail.timestamp}
+                            </Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>Job 이름:</strong> {selectedJobDetail.jobName}
+                            </Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>프로젝트 경로:</strong> {selectedJobDetail.projectPath}
+                            </Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>Venv 경로:</strong> {selectedJobDetail.venvPath}
+                            </Typography>
+                            <Typography variant="body1" gutterBottom>
+                                <strong>메인 파일:</strong> {selectedJobDetail.mainFile}
+                            </Typography>       
+                            <Typography variant="body1" gutterBottom>
+                                <strong>상태:</strong> {selectedJobDetail.status}
+                            </Typography>             
+                        </Box>
+                    ) : (
+                        <Typography>상세 정보를 불러오는 중입니다...</Typography>
                     )}
                 </DialogContent>
             </Dialog>
