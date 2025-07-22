@@ -13,7 +13,7 @@ const MainPage = () => {
 
     const fetchJobs = async () => {
         try {
-            const jobsResponse = await fetch('/api/jobs');
+            const jobsResponse = await fetch('/api/jobs/');
             if (jobsResponse.ok) {
                 const jobsData = await jobsResponse.json();
                 if (jobsData.code === 200 && jobsData.data) {                
@@ -33,7 +33,7 @@ const MainPage = () => {
 
     const fetchGpuInfo = async () => {
         try {
-            const gpuResponse = await fetch('/api/gpu');
+            const gpuResponse = await fetch('/api/gpu/');
             if (gpuResponse.ok) {
                 const gpuData = await gpuResponse.json();
                 if (gpuData.code === 200 && gpuData.data) {
