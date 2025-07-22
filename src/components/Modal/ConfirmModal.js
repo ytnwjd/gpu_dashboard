@@ -9,9 +9,8 @@ import {
     StyledCancelButton,
 } from './ConfirmModal.style';
 
-const ConfirmModal = ({ open, onClose, onConfirm, gpuStatus }) => {
-    // gpuStatus에서 필요한 값들을 구조 분해 할당
-    const { gpu24gbAvailable, gpu8gbAvailable, jobsInQueue } = gpuStatus;
+const ConfirmModal = ({ open, onClose, onConfirm, gpuInfo }) => {
+    const { gpu24gbAvailable = 0, gpu8gbAvailable = 0, jobsInQueue = 0 } = gpuInfo || {};
     const totalAvailableGpus = gpu24gbAvailable + gpu8gbAvailable;
 
     // 조건부 메시지 생성

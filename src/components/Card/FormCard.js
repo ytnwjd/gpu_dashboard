@@ -18,31 +18,12 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
     const [mainFile, setMainFile] = useState('/home/workspace/index.py');
 
     const [openModal, setOpenModal] = useState(false);
-    const [gpuStatus, setGpuStatus] = useState({
-        gpu24gbActive: 0,
-        gpu8gbActive: 0,
-        gpu24gbAvailable: 0,
-        gpu8gbAvailable: 0,
-        jobsInQueue: 0,
-    });
 
     const handleClear = (setter) => () => {
         setter('');
     };
 
     const handleSaveButtonClick = () => {
-        if (gpuInfo) {
-            setGpuStatus(gpuInfo);
-        } else {
-            console.error("GPU 데이터가 유효하지 않습니다.");
-            setGpuStatus({
-                gpu24gbActive: 6,
-                gpu8gbActive: 12,
-                gpu24gbAvailable: 0,
-                gpu8gbAvailable: 0,
-                jobsInQueue: 0,
-            });
-        }
         setOpenModal(true);
     };
 
@@ -73,7 +54,6 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 if (onJobSubmitSuccess) {
                     onJobSubmitSuccess(result.message);
                 }
-                window.location.reload();
             } else {
                 const errorMessage = result.message || `Job 생성에 실패했습니다. (코드: ${result.code})`;
                 console.error("Job 생성 실패:", errorMessage);
@@ -203,7 +183,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 open={openModal}
                 onClose={handleCancel}
                 onConfirm={handleConfirm}
-                gpuStatus={gpuStatus}
+                gpuInfo={gpuInfo}
             />
         </>
     );
