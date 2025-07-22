@@ -10,7 +10,7 @@ import {
 
 import ConfirmModal from '../Modal/ConfirmModal';
 
-const FormCard = ({ onJobSubmitSuccess }) => {
+const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
 
     const [jobName, setJobName] = useState('first job');
     const [projectPath, setProjectPath] = useState('/home/workspace');
@@ -30,42 +30,20 @@ const FormCard = ({ onJobSubmitSuccess }) => {
         setter('');
     };
 
-    const handleSaveButtonClick = async () => {
-        try {
-            const response = await fetch("/api/gpu", { 
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const result = await response.json();
-
-            if (response.ok && result.code === 200) {
-                setGpuStatus(result.data);
-            } else {
-                console.error("GPU 상태 가져오기 실패:", result.message || "알 수 없는 오류");
-                
-                setGpuStatus({
-                    gpu24gbActive: 0,
-                    gpu8gbActive: 0,
-                    gpu24gbAvailable: 0,
-                    gpu8gbAvailable: 0,
-                    jobsInQueue: 0,
-                });
-            }
-        } catch (error) {
-            console.error("GPU 상태 가져오기 중 네트워크 오류:", error);
-            
+    const handleSaveButtonClick = () => {
+        if (gpuInfo) {
+            setGpuStatus(gpuInfo);
+        } else {
+            console.error("GPU 데이터가 유효하지 않습니다.");
             setGpuStatus({
-                gpu24gbActive: 0,
-                gpu8gbActive: 0,
+                gpu24gbActive: 6,
+                gpu8gbActive: 12,
                 gpu24gbAvailable: 0,
                 gpu8gbAvailable: 0,
                 jobsInQueue: 0,
             });
-        } finally {
-            setOpenModal(true); // GPU 상태를 가져온 후 모달 open
         }
+        setOpenModal(true);
     };
 
     const handleConfirm = async () => {
