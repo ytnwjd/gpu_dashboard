@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomCard from './CustomCard';
 
 import {
@@ -13,53 +13,25 @@ import {
     StyledGpuLabel,
 } from './InfoCard.style';
 
-const InfoCard = () => {
-    const [gpuStatus, setGpuStatus] = useState({
-        gpu24gbActive: 0,
-        gpu8gbActive: 0,
-        gpu24gbAvailable: 0,
-        gpu8gbAvailable: 0,
-        jobsInQueue: 0 
-    });
-
+const InfoCard = ({ gpuInfo }) => {
     const gpu24gbTotal = 6;
     const gpu8gbTotal = 12;
 
-    const fetchGpuStatus = useCallback(async () => {
-        try {
-            
-            const response = await fetch('/api/gpu');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
+    const [gpuStatus, setGpuStatus] = useState({
+        gpu24gbActive: gpu24gbTotal,
+        gpu8gbActive: gpu8gbTotal,
+        gpu24gbAvailable: 0,
+        gpu8gbAvailable: 0,
+        jobsInQueue: 0
+    });
 
-            if (data.code === 200 && data.data) {
-                setGpuStatus(data.data); 
-            } else {
-                console.error("Failed to fetch GPU status:", data.message);
-            }
-        } catch (error) {
-            console.error("Error fetching GPU status:", error);
-
-            setGpuStatus({
-                gpu24gbActive: 0,
-                gpu8gbActive: 0,
-                gpu24gbAvailable: 0,
-                gpu8gbAvailable: 0,
-                jobsInQueue: 0 
-            });
-        }
-    }, []);
+    
 
     useEffect(() => {
-        fetchGpuStatus();
-
-        const intervalId = setInterval(fetchGpuStatus, 5000); // 5초마다 호출
-
-        // 컴포넌트 언마운트 시 인터벌 클리어
-        return () => clearInterval(intervalId);
-    }, [fetchGpuStatus]);
+        if (gpuInfo) {
+            setGpuStatus(gpuInfo);
+        }
+    }, [gpuInfo]);
 
     const gpu24gbIcons = Array.from({ length: gpu24gbTotal }, (_, index) => (
         <StyledGpuIcon
