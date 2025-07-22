@@ -95,6 +95,7 @@ const FormCard = ({ onJobSubmitSuccess }) => {
                 if (onJobSubmitSuccess) {
                     onJobSubmitSuccess(result.message);
                 }
+                window.location.reload();
             } else {
                 const errorMessage = result.message || `Job 생성에 실패했습니다. (코드: ${result.code})`;
                 console.error("Job 생성 실패:", errorMessage);
