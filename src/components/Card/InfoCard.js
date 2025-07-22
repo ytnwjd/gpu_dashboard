@@ -25,8 +25,6 @@ const InfoCard = ({ gpuInfo }) => {
         jobsInQueue: 0
     });
 
-    
-
     useEffect(() => {
         if (gpuInfo) {
             setGpuStatus(gpuInfo);
