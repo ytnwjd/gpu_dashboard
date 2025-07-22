@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TableRow, Dialog, DialogContent, DialogTitle, IconButton, Typography, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
@@ -24,17 +24,13 @@ import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";
 
 const JobListCard = ({ jobList }) => {
-    const [jobs, setJobs] = useState([]);
+  
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [jobToEdit, setJobToEdit] = useState(null);
     const [detailModalOpen, setDetailModalOpen] = useState(false);
     const [selectedJobDetail, setSelectedJobDetail] = useState(null);
 
-    useEffect(() => {
-        setJobs(jobList);
-    }, [jobList]);
-
-    const latestJobId = jobs.length > 0 ? jobs[0].id : null;
+    const latestJobId = jobList.length > 0 ? jobList[0].id : null;
 
     const headers = [
         { id: "timestamp", label: "Time Stamp", width: 160 },
@@ -48,7 +44,7 @@ const JobListCard = ({ jobList }) => {
     const [currentJobName, setCurrentJobName] = useState('');
 
     const handleShowLogsClick = (jobId) => {
-        const job = jobs.find(j => j.id === jobId);
+        const job = jobList.find(j => j.id === jobId);
         if (job) {
             setCurrentJobLogs(job.logs || []);
             setCurrentJobName(job.jobName);
@@ -64,7 +60,7 @@ const JobListCard = ({ jobList }) => {
     };
 
     const handleEditJob = (jobId) => {
-        const job = jobs.find(j => j.id === jobId);
+        const job = jobList.find(j => j.id === jobId);
         if (job) {
             setJobToEdit(job); // 수정할 Job 데이터를 상태에 저장
             setEditModalOpen(true);
@@ -88,9 +84,6 @@ const JobListCard = ({ jobList }) => {
             const responseData = await response.json();
             if (response.ok && responseData.code === 200) {
                 alert(`작업 ID: ${jobToEdit.id} 수정 성공!`);
-                setJobs(prevJobs =>
-                    prevJobs.map(job => (job.id === jobToEdit.id ? responseData.data : job))
-                );
                 handleEditModalClose();
             } else {
                 alert(`작업 수정 실패: ${responseData.message || '알 수 없는 오류'}`);
@@ -106,7 +99,6 @@ const JobListCard = ({ jobList }) => {
             const result = await response.json();
             if (response.ok && result.code === 200) {
                 alert(result.message);
-                setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
             } else {
                 alert(result.message || `Job 삭제에 실패했습니다.`);
             }
@@ -156,7 +148,7 @@ const JobListCard = ({ jobList }) => {
                             </TableRow>
                         </StyledTableHead>
                         <StyledTableBody>
-                            {jobs.length === 0 ? (
+                            {jobList.length === 0 ? (
                                 <TableRow>
                                     <StyledMessageTableCell colSpan={headers.length}>
                                         <StyledMessageTypography variant="body1">
@@ -165,7 +157,7 @@ const JobListCard = ({ jobList }) => {
                                     </StyledMessageTableCell>
                                 </TableRow>
                             ) : (
-                                jobs.map((job) => (
+                                jobList.map((job) => (
                                     <TableRow
                                         key={job.id}
                                         onClick={() => handleRowClick(job.id)}
