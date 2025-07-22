@@ -23,43 +23,12 @@ import {
 import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";
 
-const JobListCard = () => {
-    const [jobList, setJobList] = useState([]);
-
+const JobListCard = ({ jobList }) => {
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [jobToEdit, setJobToEdit] = useState(null); // 수정할 Job의 데이터
 
     const [detailModalOpen, setDetailModalOpen] = useState(false);
     const [selectedJobDetail, setSelectedJobDetail] = useState(null);
-
-    const fetchJobs = async () => {
-        try {
-            const response = await fetch('/api/jobs');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const responseData = await response.json();
-
-            if (responseData.code === 200 && responseData.data) {
-                const jobs = responseData.data;
-                console.log(jobs);
-                setJobList(jobs);
-            } else {
-                console.error("API response error:", responseData.message);
-                setJobList([]);
-            }
-        } catch (error) {
-            console.error("Failed to fetch jobs:", error);
-            setJobList([]);
-        }
-    };
-
-    useEffect(() => {
-        fetchJobs();
-
-        const intervalId = setInterval(fetchJobs, 5000);
-        return () => clearInterval(intervalId);
-    }, []);
 
     const latestJobId = jobList.length > 0 ? jobList[0].id : null;
 
