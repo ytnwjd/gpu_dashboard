@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TableRow, Dialog, DialogContent, DialogTitle, IconButton, Typography, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
@@ -24,13 +24,17 @@ import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";
 
 const JobListCard = ({ jobList }) => {
+    const [jobs, setJobs] = useState([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [jobToEdit, setJobToEdit] = useState(null); // 수정할 Job의 데이터
-
+    const [jobToEdit, setJobToEdit] = useState(null);
     const [detailModalOpen, setDetailModalOpen] = useState(false);
     const [selectedJobDetail, setSelectedJobDetail] = useState(null);
 
-    const latestJobId = jobList.length > 0 ? jobList[0].id : null;
+    useEffect(() => {
+        setJobs(jobList);
+    }, [jobList]);
+
+    const latestJobId = jobs.length > 0 ? jobs[0].id : null;
 
     const headers = [
         { id: "timestamp", label: "Time Stamp", width: 160 },
@@ -44,7 +48,7 @@ const JobListCard = ({ jobList }) => {
     const [currentJobName, setCurrentJobName] = useState('');
 
     const handleShowLogsClick = (jobId) => {
-        const job = jobList.find(j => j.id === jobId);
+        const job = jobs.find(j => j.id === jobId);
         if (job) {
             setCurrentJobLogs(job.logs || []);
             setCurrentJobName(job.jobName);
@@ -60,7 +64,7 @@ const JobListCard = ({ jobList }) => {
     };
 
     const handleEditJob = (jobId) => {
-        const job = jobList.find(j => j.id === jobId);
+        const job = jobs.find(j => j.id === jobId);
         if (job) {
             setJobToEdit(job); // 수정할 Job 데이터를 상태에 저장
             setEditModalOpen(true);
@@ -75,78 +79,54 @@ const JobListCard = ({ jobList }) => {
 
     const handleEditFormSubmit = async (formData) => {
         if (!jobToEdit) return;
-
-        console.log(`Submitting edit for job ID: ${jobToEdit.id}`, formData);
-
         try {
             const response = await fetch(`/api/jobs/${jobToEdit.id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
-
             const responseData = await response.json();
-
             if (response.ok && responseData.code === 200) {
                 alert(`작업 ID: ${jobToEdit.id} 수정 성공!`);
+                setJobs(prevJobs =>
+                    prevJobs.map(job => (job.id === jobToEdit.id ? responseData.data : job))
+                );
                 handleEditModalClose();
-                await fetchJobs();
             } else {
                 alert(`작업 수정 실패: ${responseData.message || '알 수 없는 오류'}`);
-                console.error("Failed to edit job:", responseData.message);
             }
         } catch (error) {
             alert(`작업 수정 중 오류 발생: ${error.message}`);
-            console.error("Error editing job:", error);
         }
     };
 
-    const handleDeleteJob = async (jobId) => { // 함수를 async로 변경
-        console.log(`Delete job with ID: ${jobId}`);
-    
+    const handleDeleteJob = async (jobId) => {
         try {
-            const response = await fetch(`/api/jobs/${jobId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
+            const response = await fetch(`/api/jobs/${jobId}`, { method: 'DELETE' });
             const result = await response.json();
-    
             if (response.ok && result.code === 200) {
                 alert(result.message);
-                await fetchJobs();
+                setJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
             } else {
-                const errorMessage = result.message || `Job 삭제에 실패했습니다. (코드: ${result.code})`;
-                alert(errorMessage); 
+                alert(result.message || `Job 삭제에 실패했습니다.`);
             }
         } catch (error) {
-            console.error(`Job ${jobId} 삭제 중 오류 발생:`, error);
             alert(`Job ${jobId} 삭제 중 오류가 발생했습니다.`);
         }
     };
 
     const handleRowClick = async (jobId) => {
-        console.log(`Row clicked for job ID: ${jobId}`);
         try {
             const response = await fetch(`/api/jobs/${jobId}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const responseData = await response.json();
-
             if (responseData.code === 200 && responseData.data) {
                 setSelectedJobDetail(responseData.data);
                 setDetailModalOpen(true);
             } else {
-                console.error("Failed to fetch job details:", responseData.message);
                 alert(`Job 상세 정보 불러오기 실패: ${responseData.message || '알 수 없는 오류'}`);
             }
         } catch (error) {
-            console.error("Error fetching job details:", error);
             alert(`Job 상세 정보 불러오기 중 오류 발생: ${error.message}`);
         }
     };
@@ -176,7 +156,7 @@ const JobListCard = ({ jobList }) => {
                             </TableRow>
                         </StyledTableHead>
                         <StyledTableBody>
-                            {jobList.length === 0 ? (
+                            {jobs.length === 0 ? (
                                 <TableRow>
                                     <StyledMessageTableCell colSpan={headers.length}>
                                         <StyledMessageTypography variant="body1">
@@ -185,7 +165,7 @@ const JobListCard = ({ jobList }) => {
                                     </StyledMessageTableCell>
                                 </TableRow>
                             ) : (
-                                jobList.map((job) => (
+                                jobs.map((job) => (
                                     <TableRow
                                         key={job.id}
                                         onClick={() => handleRowClick(job.id)}
