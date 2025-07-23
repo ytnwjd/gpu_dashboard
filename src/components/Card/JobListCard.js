@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { TableRow, Dialog, DialogContent, DialogTitle, IconButton, Typography, Box } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState, useEffect, useCallback } from 'react';
+import { TableRow } from '@mui/material';
 import CustomCard from './CustomCard'; // CustomCard 임포트
 
 import {
@@ -17,9 +16,17 @@ import {
 
 import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";
+import JobDetailModal from '../Modal/JobDetailModal';
 
-const JobListCard = ({ jobList }) => {
+const JobListCard = ({ jobList: initialJobList, setJobList }) => {
   
+    const [jobList, setInternalJobList] = useState(initialJobList || []);
+    
+    useEffect(() => {
+        setInternalJobList(initialJobList);
+    }, [initialJobList]);
+
+
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [jobToEdit, setJobToEdit] = useState(null);
     const [detailModalOpen, setDetailModalOpen] = useState(false);
@@ -68,6 +75,24 @@ const JobListCard = ({ jobList }) => {
         setJobToEdit(null); // 모달 닫을 때 데이터 초기화
     };
 
+    const refreshJobList = useCallback(async () => {
+        try {
+            const response = await fetch('/api/jobs/');
+            if (!response.ok) throw new Error('Failed to fetch job list');
+            const data = await response.json();
+            if (data.code === 200) {
+                setInternalJobList(data.data);
+                if (setJobList) { 
+                    setJobList(data.data);
+                }
+            } else {
+                console.error("Failed to refresh job list:", data.message);
+            }
+        } catch (error) {
+            console.error("Error refreshing job list:", error);
+        }
+    }, [setJobList]);
+
     const handleEditFormSubmit = async (formData) => {
         if (!jobToEdit) return;
         try {
@@ -79,7 +104,8 @@ const JobListCard = ({ jobList }) => {
             const responseData = await response.json();
             if (response.ok && responseData.code === 200) {
                 alert(`작업 ID: ${jobToEdit.id} 수정 성공!`);
-                handleEditModalClose();
+                refreshJobList();
+                handleEditModalClose(); // 모달 닫기
             } else {
                 alert(`작업 수정 실패: ${responseData.message || '알 수 없는 오류'}`);
             }
@@ -94,6 +120,7 @@ const JobListCard = ({ jobList }) => {
             const result = await response.json();
             if (response.ok && result.code === 200) {
                 alert(result.message);
+                refreshJobList();
             } else {
                 alert(result.message || `Job 삭제에 실패했습니다.`);
             }
@@ -211,86 +238,20 @@ const JobListCard = ({ jobList }) => {
                 logs={currentJobLogs}
             />
 
-            <Dialog
-                open={editModalOpen}
-                onClose={handleEditModalClose}
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle sx={{ m: 0, p: 2 }}>
-                    작업 수정
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleEditModalClose}
-                        sx={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 8,
-                            color: (theme) => theme.palette.grey[500],
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent dividers>
-                    {jobToEdit && (
-                        <EditJobFormModal
-                            initialData={jobToEdit}
-                            onClose={handleEditModalClose}
-                            onSave={handleEditFormSubmit}
-                        />
-                    )}
-                </DialogContent>
-            </Dialog>
+            {jobToEdit && (
+                <EditJobFormModal
+                    open={editModalOpen}
+                    onClose={handleEditModalClose}
+                    initialData={jobToEdit}
+                    onSave={handleEditFormSubmit}
+                />
+            )}
 
-            <Dialog
+            <JobDetailModal
                 open={detailModalOpen}
                 onClose={handleDetailModalClose}
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle sx={{ m: 0, p: 2 }}>
-                    Job 상세 정보
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleDetailModalClose}
-                        sx={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 8,
-                            color: (theme) => theme.palette.grey[500],
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent dividers>
-                    {selectedJobDetail ? (
-                        <Box sx={{ p: 2 }}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>타임스탬프:</strong> {selectedJobDetail.timestamp}
-                            </Typography>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Job 이름:</strong> {selectedJobDetail.jobName}
-                            </Typography>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>프로젝트 경로:</strong> {selectedJobDetail.projectPath}
-                            </Typography>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Venv 경로:</strong> {selectedJobDetail.venvPath}
-                            </Typography>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>메인 파일:</strong> {selectedJobDetail.mainFile}
-                            </Typography>       
-                            <Typography variant="body1" gutterBottom>
-                                <strong>상태:</strong> {selectedJobDetail.status}
-                            </Typography>             
-                        </Box>
-                    ) : (
-                        <Typography>상세 정보를 불러오는 중입니다...</Typography>
-                    )}
-                </DialogContent>
-            </Dialog>
+                jobDetail={selectedJobDetail}
+            />
         </>
     );
 }
