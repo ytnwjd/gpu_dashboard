@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { TableRow, Dialog, DialogContent, DialogTitle, IconButton, Typography, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-    StyledCardHeader,
-    StyledHeaderContentDivider,
-} from './CustomCard.style'
+import CustomCard from './CustomCard'; // CustomCard 임포트
 
 import {
-    StyledCard,
-    StyledCardContent,
     StyledTableContainer,
     StyledTable,
     StyledTableHead,
@@ -128,81 +123,86 @@ const JobListCard = ({ jobList }) => {
         setSelectedJobDetail(null);
     };
 
-    return (
-        <StyledCard width='740px' height='400px'>
-            <StyledCardHeader title="GPU Job 실행 리스트" />
-            <StyledHeaderContentDivider />
-            <StyledCardContent>
-                <StyledTableContainer>
-                    <StyledTable stickyHeader aria-label="job list table">
-                        <StyledTableHead>
-                            <TableRow>
-                                {headers.map((header) => (
-                                    <StyledHeaderTableCell
-                                        key={header.id}
-                                        sx={{ width: header.width || 'auto', flex: header.flex || 'none' }}
-                                    >
-                                        {header.label}
-                                    </StyledHeaderTableCell>
-                                ))}
-                            </TableRow>
-                        </StyledTableHead>
-                        <StyledTableBody>
-                            {jobList.length === 0 ? (
-                                <TableRow>
-                                    <StyledMessageTableCell colSpan={headers.length}>
-                                        <StyledMessageTypography variant="body1">
-                                            GPU 사용 정보가 없습니다.
-                                        </StyledMessageTypography>
-                                    </StyledMessageTableCell>
-                                </TableRow>
-                            ) : (
-                                jobList.map((job) => (
-                                    <TableRow
-                                        key={job.id}
-                                        onClick={() => handleRowClick(job.id)}
-                                        sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
-                                    >
-                                        <StyledBodyTableCell>{job.timestamp}</StyledBodyTableCell>
-                                        <StyledBodyTableCell>{job.jobName}</StyledBodyTableCell>
-                                        <StyledBodyTableCell>{job.status}</StyledBodyTableCell>                                    
-                                        <StyledBodyTableCell sx={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center'}}
-                                            onClick={(e) => e.stopPropagation()} 
+    const cardContent = (
+        <StyledTableContainer>
+            <StyledTable stickyHeader aria-label="job list table">
+                <StyledTableHead>
+                    <TableRow>
+                        {headers.map((header) => (
+                            <StyledHeaderTableCell
+                                key={header.id}
+                                sx={{ width: header.width || 'auto', flex: header.flex || 'none' }}
+                            >
+                                {header.label}
+                            </StyledHeaderTableCell>
+                        ))}
+                    </TableRow>
+                </StyledTableHead>
+                <StyledTableBody>
+                    {jobList.length === 0 ? (
+                        <TableRow>
+                            <StyledMessageTableCell colSpan={headers.length}>
+                                <StyledMessageTypography variant="body1">
+                                    GPU 사용 정보가 없습니다.
+                                </StyledMessageTypography>
+                            </StyledMessageTableCell>
+                        </TableRow>
+                    ) : (
+                        jobList.map((job) => (
+                            <TableRow
+                                key={job.id}
+                                onClick={() => handleRowClick(job.id)}
+                                sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
+                            >
+                                <StyledBodyTableCell>{job.timestamp}</StyledBodyTableCell>
+                                <StyledBodyTableCell>{job.jobName}</StyledBodyTableCell>
+                                <StyledBodyTableCell>{job.status}</StyledBodyTableCell>                                    
+                                <StyledBodyTableCell sx={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center'}}
+                                    onClick={(e) => e.stopPropagation()} 
+                                >
+                                    {job.status === "대기" && (
+                                        <StyledTextButton
+                                            variant="body2"
+                                            onClick={() => handleEditJob(job.id)}
+                                            sx={{ whiteSpace: 'nowrap' }}
                                         >
-                                            {job.status === "대기" && (
-                                                <StyledTextButton
-                                                    variant="body2"
-                                                    onClick={() => handleEditJob(job.id)}
-                                                    sx={{ whiteSpace: 'nowrap' }}
-                                                >
-                                                    작업 수정
-                                                </StyledTextButton>
-                                            )}
-                                            {(job.status === "종료" || job.status === "중단") && (
-                                                <StyledTextButton
-                                                    variant="body2"
-                                                    onClick={() => handleDeleteJob(job.id)}
-                                                    sx={{ color: 'red', whiteSpace: 'nowrap' }}
-                                                >
-                                                    작업 삭제
-                                                </StyledTextButton>
-                                            )}
-                                            {((job.id === latestJobId || job.status === "실행 중") && job.status !== "대기") && (
-                                                <StyledTextButton
-                                                    variant="body2"
-                                                    onClick={() => handleShowLogsClick(job.id)}
-                                                >
-                                                    show logs
-                                                </StyledTextButton>
-                                            )}
-                                        </StyledBodyTableCell>
-                                    </TableRow>
-                                ))
-                            )}
-                        </StyledTableBody>
-                    </StyledTable>
-                </StyledTableContainer>
-            </StyledCardContent>
+                                            작업 수정
+                                        </StyledTextButton>
+                                    )}
+                                    {(job.status === "종료" || job.status === "중단") && (
+                                        <StyledTextButton
+                                            variant="body2"
+                                            onClick={() => handleDeleteJob(job.id)}
+                                            sx={{ color: 'red', whiteSpace: 'nowrap' }}
+                                        >
+                                            작업 삭제
+                                        </StyledTextButton>
+                                    )}
+                                    {((job.id === latestJobId || job.status === "실행 중") && job.status !== "대기") && (
+                                        <StyledTextButton
+                                            variant="body2"
+                                            onClick={() => handleShowLogsClick(job.id)}
+                                        >
+                                            show logs
+                                        </StyledTextButton>
+                                    )}
+                                </StyledBodyTableCell>
+                            </TableRow>
+                        ))
+                    )}
+                </StyledTableBody>
+            </StyledTable>
+        </StyledTableContainer>
+    );
+
+    return (
+        <>
+            <CustomCard
+                title="GPU Job 실행 리스트"
+                content={cardContent}
+                width='740px'
+                height='400px'
+            />
 
             <LogViewerDrawer
                 open={drawerOpen}
@@ -291,7 +291,7 @@ const JobListCard = ({ jobList }) => {
                     )}
                 </DialogContent>
             </Dialog>
-        </StyledCard>
+        </>
     );
 }
 
