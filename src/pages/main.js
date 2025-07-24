@@ -7,7 +7,6 @@ import './mainPage.css';
 const MainPage = () => {
     const [gpuInfo, setGpuInfo] = useState(null);
     const [jobList, setJobList] = useState([]);
-    const [jobListTrigger, setJobListTrigger] = useState(0);
     const [showDescription, setShowDescription] = useState(false);
     const [descriptionText, setDescriptionText] = useState('');
 
@@ -52,13 +51,12 @@ const MainPage = () => {
     useEffect(() => {
         fetchJobs();
         fetchGpuInfo();
+    }, []);
 
-    }, [jobListTrigger]);
-
-    const handleJobSubmitSuccess = (message) => {
+    const handleJobSubmitSuccess = ({message, data}) => {
         setDescriptionText(message);
         setShowDescription(true);
-        setJobListTrigger(prev => prev + 1);
+        setJobList([data, ...jobList]);
     };
 
     return (

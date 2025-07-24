@@ -49,24 +49,24 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
             const result = await response.json();
 
             if (response.ok && result.code === 200) {
-                console.log("Job 생성 성공:", result.message, "Job ID:", result.data.id);
+                console.log("Job 생성 성공:", result.message, "Job:", result.data);
                 setOpenModal(false);
                 if (onJobSubmitSuccess) {
-                    onJobSubmitSuccess(result.message);
+                    onJobSubmitSuccess({message : result.message, data : result.data});
                 }
             } else {
                 const errorMessage = result.message || `Job 생성에 실패했습니다. (코드: ${result.code})`;
                 console.error("Job 생성 실패:", errorMessage);
                 setOpenModal(false);
                 if (onJobSubmitSuccess) {
-                    onJobSubmitSuccess(errorMessage);
+                    onJobSubmitSuccess({message : errorMessage, data : null});
                 }
             }
         } catch (error) {
             console.error("Job 생성 중 네트워크 오류 또는 예외 발생:", error);
             setOpenModal(false);
             if (onJobSubmitSuccess) {
-                onJobSubmitSuccess("Job 생성 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.");
+                onJobSubmitSuccess({message : "Job 생성 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.", data : null});
             }
         }
     };
