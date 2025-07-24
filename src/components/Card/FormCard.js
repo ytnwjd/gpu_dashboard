@@ -27,52 +27,47 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
         setOpenModal(true);
     };
 
-    const handleConfirm = async () => {
-        console.log("Job 제출 시도...");
-
+    const handleConfirm = async () => {    
         const jobData = {
-            jobName: jobName,       
+            jobName: jobName,
             projectPath: projectPath,
-            venvPath: venvPath,   
-            mainFile: mainFile   
+            venvPath: venvPath,
+            mainFile: mainFile
         };
-
+    
         try {
-            const response = await fetch("api/jobs/", { 
+            const response = await fetch("api/jobs/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(jobData),
             });
-
+    
             const result = await response.json();
-
-            if (response.ok && result.code === 200) {
-                console.log("Job 생성 성공:", result.message, "Job:", result.data);
+            const finalResult = response.ok ? result : result.detail;
+    
+            if (response.ok && finalResult.code === 200) {
                 setOpenModal(false);
                 if (onJobSubmitSuccess) {
-                    onJobSubmitSuccess({message : result.message, data : result.data});
+                    onJobSubmitSuccess({ message: finalResult.message, data: finalResult.data });
                 }
             } else {
-                const errorMessage = result.message || `Job 생성에 실패했습니다. (코드: ${result.code})`;
-                console.error("Job 생성 실패:", errorMessage);
+                const errorMessage = finalResult.message || `Job 생성에 실패했습니다. (코드: ${finalResult.code || response.status})`;
                 setOpenModal(false);
                 if (onJobSubmitSuccess) {
-                    onJobSubmitSuccess({message : errorMessage, data : null});
+                    onJobSubmitSuccess({ message: errorMessage, data: null });
                 }
             }
         } catch (error) {
-            console.error("Job 생성 중 네트워크 오류 또는 예외 발생:", error);
             setOpenModal(false);
             if (onJobSubmitSuccess) {
-                onJobSubmitSuccess({message : "Job 생성 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.", data : null});
+                onJobSubmitSuccess({ message: "Job 생성 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.", data: null });
             }
         }
     };
 
     const handleCancel = () => {
-        console.log("Job 제출 취소");
         setOpenModal(false);
     };
 

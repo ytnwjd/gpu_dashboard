@@ -18,14 +18,12 @@ const MainPage = () => {
                 if (jobsData.code === 200 && jobsData.data) {                
                     setJobList(jobsData.data);
                 } else {
-                    console.error("API response error (Jobs):", jobsData.message);
                     setJobList([]);
                 }
             } else {
                 throw new Error(`HTTP error! status: ${jobsResponse.status}`);
             }
         } catch (error) {
-            console.error("Failed to fetch jobs:", error);
             setJobList([]);
         }
     };
@@ -54,9 +52,11 @@ const MainPage = () => {
     }, []);
 
     const handleJobSubmitSuccess = ({message, data}) => {
-        setDescriptionText(message);
         setShowDescription(true);
-        setJobList([data, ...jobList]);
+        if (data && typeof data === 'object' && data.id !== undefined) {
+            setJobList(prevJobList => [data, ...prevJobList]);
+        } 
+        setDescriptionText(message);
     };
 
     return (
