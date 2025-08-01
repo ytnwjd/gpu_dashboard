@@ -15,7 +15,7 @@ const useFileExplorer = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`api/files/list-contents/`, {
+            const response = await axios.get(`api/files/list-contents`, {
                 params: { path: path }
             });
             const allItems = response.data.items;
