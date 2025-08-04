@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import { Button } from '@mui/material'; 
 
 export const StyledOverlay = styled('div')({
     position: 'fixed',
@@ -61,4 +62,24 @@ export const StyledMessage = styled('p')({
 
 export const StyledErrorMessage = styled(StyledMessage)({ 
     color: 'red',
+});
+
+export const StyledModalActions = styled('div')({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 0',
+    borderTop: '1px solid #eee',
+    marginTop: '15px',
+});
+
+export const StyledConfirmButton = styled(Button)({
+    backgroundColor: '#007bff',
+    color: 'white',
+    '&:hover': {
+        backgroundColor: '#0056b3',
+    },
+    '&:disabled': {
+        backgroundColor: '#e0e0e0',
+    }
 });

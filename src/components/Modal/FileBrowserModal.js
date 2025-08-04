@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import useFileExplorer from '../../hooks/useFileExplorer';
 import FileList from '../FileList/FileList';
@@ -12,11 +12,15 @@ import {
     StyledModalBody,
     StyledCloseButton,
     StyledMessage,
-    StyledErrorMessage
+    StyledErrorMessage,
+    StyledModalActions,
+    StyledConfirmButton, 
 } from './FileBrowserModal.styled';
 
 
-const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기" }) => {
+const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelectPath }) => {
+    const [selectedPath, setSelectedPath] = useState(null); 
+
     const {
         currentPath,
         paginatedItems,
@@ -32,14 +36,22 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기" }) => {
     if (!isOpen) return null;
 
     const handleItemClick = (item) => {
-        console.log('FileBrowserModal: handleItemClick이 받은 아이템:', item);
+        const path = item.path;
+        const formattedPath = path.startsWith('/') ? path : `/${path}`;
+
         if (item.is_directory) {
-            // console.log('FileBrowserModal: 디렉토리입니다. navigateTo를 path로 호출합니다:', item.path);
-            navigateTo(item.path);
+            navigateTo(path);
+            setSelectedPath(formattedPath);
         } else {
-            // console.log('FileBrowserModal: 파일입니다.');
-            // 파일 선택 로직 
+            setSelectedPath(formattedPath);
         }
+    };
+
+    const handleConfirm = () => {
+        if (selectedPath && onSelectPath) {
+            onSelectPath(selectedPath);
+        }
+        onClose();
     };
 
     return ReactDOM.createPortal(
@@ -69,6 +81,11 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기" }) => {
                         </>
                     )}
                 </StyledModalBody>
+        
+                <StyledModalActions>
+                    <p>선택된 경로: {selectedPath}</p>
+                    <StyledConfirmButton onClick={handleConfirm} disabled={!selectedPath}>완료</StyledConfirmButton>
+                </StyledModalActions>
             </StyledModal>
         </StyledOverlay>,
         document.getElementById('modal-root')
