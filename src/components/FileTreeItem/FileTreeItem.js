@@ -4,7 +4,6 @@ import {
     StyledIconSpan,
     StyledNameSpan,
     StyledMetaSpan,
-    StyledDownloadButton
 } from './FileItem.style'; 
 
 const FileItem = ({ item, onNavigate }) => {
