@@ -6,7 +6,7 @@ import {
     StyledEmptyMessage
 } from './FileList.styled'; 
 
-const FileList = ({ items, onNavigate, onDownload }) => {
+const FileList = ({ items, onNavigate }) => {
     return (
         <StyledFileListContainer>
             {items.length === 0 ? (
@@ -17,7 +17,7 @@ const FileList = ({ items, onNavigate, onDownload }) => {
                         key={item.path}
                         item={item}
                         onNavigate={onNavigate}
-                        onDownload={onDownload}
+                        // onDownload={onDownload}
                     />
                 ))
             )}

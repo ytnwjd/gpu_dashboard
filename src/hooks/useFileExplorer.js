@@ -39,27 +39,27 @@ const useFileExplorer = () => {
         fetchFileList(path);
     }, [fetchFileList]);
 
-    const downloadFile = useCallback(async (filePath, fileName) => {
-        try {
-            const response = await axios.get(`api/files/download-file`, {
-                params: { path: filePath },
-                responseType: 'blob', // 파일 다운로드를 위해 blob 타입으로 받음
-            });
+    // const downloadFile = useCallback(async (filePath, fileName) => {
+    //     try {
+    //         const response = await axios.get(`api/files/download-file`, {
+    //             params: { path: filePath },
+    //             responseType: 'blob', // 파일 다운로드를 위해 blob 타입으로 받음
+    //         });
 
-            // Blob을 사용하여 다운로드 링크 생성
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', fileName); // 다운로드될 파일 이름 설정
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode.removeChild(link);
-            window.URL.revokeObjectURL(url); // 메모리 해제
-        } catch (err) {
-            console.error('Failed to download file:', err);
-            setError('파일 다운로드에 실패했습니다.');
-        }
-    }, []);
+    //         // Blob을 사용하여 다운로드 링크 생성
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement('a');
+    //         link.href = url;
+    //         link.setAttribute('download', fileName); // 다운로드될 파일 이름 설정
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         link.parentNode.removeChild(link);
+    //         window.URL.revokeObjectURL(url); // 메모리 해제
+    //     } catch (err) {
+    //         console.error('Failed to download file:', err);
+    //         setError('파일 다운로드에 실패했습니다.');
+    //     }
+    // }, []);
 
     const handlePageChange = useCallback((page) => {
         if (page >= 1 && page <= totalPages) {
@@ -84,7 +84,7 @@ const useFileExplorer = () => {
         loading,
         error,
         navigateTo,
-        downloadFile,
+        // downloadFile,
         currentPage,
         totalPages,
         handlePageChange,

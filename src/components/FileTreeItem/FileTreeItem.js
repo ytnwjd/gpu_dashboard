@@ -7,7 +7,7 @@ import {
     StyledDownloadButton
 } from './FileItem.style'; 
 
-const FileItem = ({ item, onNavigate, onDownload }) => {
+const FileItem = ({ item, onNavigate }) => {
     const icon = item.is_directory ? '📁' : '📄';
     const size = item.size ? `${(item.size / 1024).toFixed(2)} KB` : '';
     const lastModified = item.last_modified ?
@@ -18,12 +18,12 @@ const FileItem = ({ item, onNavigate, onDownload }) => {
         onNavigate(item);
     };
 
-    const handleDownload = (e) => {
-        e.stopPropagation(); 
-        if (!item.is_directory) {
-            onDownload(item.path, item.name);
-        }
-    };
+    // const handleDownload = (e) => {
+    //     e.stopPropagation(); 
+    //     if (!item.is_directory) {
+    //         onDownload(item.path, item.name);
+    //     }
+    // };
 
     return (
         <StyledFileItemContainer onClick={handleClick}>
@@ -31,9 +31,9 @@ const FileItem = ({ item, onNavigate, onDownload }) => {
             <StyledNameSpan>{item.name}</StyledNameSpan>
             {!item.is_directory && <StyledMetaSpan>{size}</StyledMetaSpan>}
             <StyledMetaSpan>{lastModified}</StyledMetaSpan>            
-            {!item.is_directory && (
+            {/* {!item.is_directory && (
                 <StyledDownloadButton onClick={handleDownload}>다운로드</StyledDownloadButton>
-            )}
+            )} */}
         </StyledFileItemContainer>
     );
 };

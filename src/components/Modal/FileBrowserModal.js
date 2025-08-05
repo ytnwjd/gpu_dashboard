@@ -27,7 +27,7 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
         loading,
         error,
         navigateTo,
-        downloadFile,
+        // downloadFile,
         currentPage,
         totalPages,
         handlePageChange,
@@ -71,7 +71,7 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
                             <FileList
                                 items={paginatedItems}
                                 onNavigate={handleItemClick}
-                                onDownload={downloadFile}
+                                // onDownload={downloadFile}
                             />
                             <Pagination
                                 currentPage={currentPage}
