@@ -7,7 +7,7 @@ export const StyledOverlay = styled('div')({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, .7)',
+    backgroundColor: 'rgba(224, 224, 224, .7)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -15,10 +15,10 @@ export const StyledOverlay = styled('div')({
 });
 
 export const StyledModal = styled('div')({
-    backgroundColor: '#fff',
+    backgroundColor: '#fefefe', 
     padding: '20px',
     borderRadius: '8px',
-    boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+    boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
     width: '90%',
     maxWidth: '1000px',
     maxHeight: '90%',
@@ -32,7 +32,7 @@ export const StyledModalHeader = styled('div')({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottom: '1px solid #eee',
+    borderBottom: '1px solid #e0e0e0',
     paddingBottom: '10px',
     marginBottom: '15px',
 });
@@ -61,7 +61,7 @@ export const StyledMessage = styled('p')({
 });
 
 export const StyledErrorMessage = styled(StyledMessage)({ 
-    color: 'red',
+    color: '#E5F3A3',
 });
 
 export const StyledModalActions = styled('div')({
@@ -74,10 +74,10 @@ export const StyledModalActions = styled('div')({
 });
 
 export const StyledConfirmButton = styled(Button)({
-    backgroundColor: '#007bff',
+    backgroundColor: '#143d60',
     color: 'white',
     '&:hover': {
-        backgroundColor: '#0056b3',
+        backgroundColor: '#082238',
     },
     '&:disabled': {
         backgroundColor: '#e0e0e0',
