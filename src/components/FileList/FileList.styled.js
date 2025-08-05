@@ -1,15 +1,36 @@
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/system';
 
-export const StyledFileListContainer = styled('div')(({ theme }) => ({
-    border: `1px solid ${theme.palette.divider || '#ddd'}`, 
-    borderRadius: '8px',
-    marginTop: '20px',
-    overflow: 'hidden',
-}));
+export const StyledList = styled('ul')({
+  listStyleType: 'none',
+  padding: 0,
+});
 
-export const StyledEmptyMessage = styled('p')(({ theme }) => ({
-    textAlign: 'center',
-    padding: '20px',
-    color: theme.palette.text.secondary || '#555', 
-    fontSize: '1.1em',
-}));
+export const StyledFileItem = styled('li')({
+  display: 'flex',
+  alignItems: 'center',
+  padding: '8px 14px',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: '#f0f0f0',
+  },
+});
+
+export const StyledFolderItem = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  padding: '8px 14px',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: '#f0f0f0',
+  },
+});
+
+export const StyledFileIcon = styled('span')({
+  marginRight: '10px',
+  display: 'flex',
+  alignItems: 'center',
+});
+
+export const StyledFileName = styled('span')({
+  flex: 1,
+});
