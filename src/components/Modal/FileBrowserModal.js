@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import useFileExplorer from '../../hooks/useFileExplorer';
 import FileList from '../FileList/FileList';
-import Pagination from '../Pagination';
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 
 import {
     StyledOverlay,
@@ -14,37 +12,25 @@ import {
     StyledMessage,
     StyledErrorMessage,
     StyledModalActions,
-    StyledConfirmButton, 
+    StyledConfirmButton,
 } from './FileBrowserModal.styled';
 
-
 const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelectPath }) => {
-    const [selectedPath, setSelectedPath] = useState(null); 
+    const [selectedPath, setSelectedPath] = useState(null);
 
     const {
-        currentPath,
-        paginatedItems,
+        fileList,
         loading,
         error,
-        navigateTo,
-        // downloadFile,
-        currentPage,
-        totalPages,
-        handlePageChange,
+        toggleFolder,
+        expandedFolders,
     } = useFileExplorer();
 
     if (!isOpen) return null;
 
-    const handleItemClick = (item) => {
-        const path = item.path;
-        const formattedPath = path.startsWith('/') ? path : `/${path}`;
-
-        if (item.is_directory) {
-            navigateTo(path);
-            setSelectedPath(formattedPath);
-        } else {
-            setSelectedPath(formattedPath);
-        }
+    const handleItemSelect = (item) => {
+        const formattedPath = item.path.startsWith('/') ? item.path : `/${item.path}`;
+        setSelectedPath(formattedPath);
     };
 
     const handleConfirm = () => {
@@ -67,21 +53,16 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
 
                     {!loading && !error && (
                         <>
-                            <Breadcrumbs currentPath={currentPath} onNavigate={navigateTo} />
                             <FileList
-                                items={paginatedItems}
-                                onNavigate={handleItemClick}
-                                // onDownload={downloadFile}
-                            />
-                            <Pagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={handlePageChange}
+                                items={fileList}
+                                onToggle={toggleFolder}
+                                onSelect={handleItemSelect}
+                                expandedFolders={expandedFolders}
                             />
                         </>
                     )}
                 </StyledModalBody>
-        
+
                 <StyledModalActions>
                     <p>선택된 경로: {selectedPath}</p>
                     <StyledConfirmButton onClick={handleConfirm} disabled={!selectedPath}>완료</StyledConfirmButton>
