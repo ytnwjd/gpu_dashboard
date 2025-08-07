@@ -35,11 +35,15 @@ export const StyledModalHeader = styled('div')({
     borderBottom: '1px solid #e0e0e0',
     paddingBottom: '10px',
     marginBottom: '15px',
+    '& h2': {
+        margin: 0,
+    },
 });
 
 export const StyledModalBody = styled('div')({
     flexGrow: 1,
     overflowY: 'auto',
+    display: 'flex',
 });
 
 export const StyledCloseButton = styled('button')({

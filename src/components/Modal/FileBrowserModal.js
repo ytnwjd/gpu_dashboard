@@ -30,10 +30,10 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
         <StyledOverlay onClick={onClose}>
             <StyledModal onClick={e => e.stopPropagation()}>
                 <StyledModalHeader>
-                    <h2 style={{ margin: 0 }}>{title}</h2>
+                    <h2>{title}</h2>
                     <StyledCloseButton onClick={onClose}>&times;</StyledCloseButton>
                 </StyledModalHeader>
-                <StyledModalBody style={{ display: 'flex' }}>
+                <StyledModalBody>
                     {loading && <StyledMessage>파일 목록을 불러오는 중입니다...</StyledMessage>}
                     {error && <StyledErrorMessage>오류 발생: {error}</StyledErrorMessage>}
 
