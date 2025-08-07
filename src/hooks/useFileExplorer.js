@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const useFileExplorer = () => {
-    const [fileList, setFileList] = useState([]);
+    const [pathStack, setPathStack] = useState(['']); // 경로 스택
+    const [explorerData, setExplorerData] = useState({ '': [] }); // 경로별 파일 목록
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [expandedFolders, setExpandedFolders] = useState({});
+    const [selectedPath, setSelectedPath] = useState(''); // 선택된 파일 또는 폴더 경로
 
-    // 특정 폴더의 콘텐츠를 가져오는 함수 
     const fetchFolderContents = useCallback(async (path) => {
         setLoading(true);
         setError(null);
@@ -15,62 +15,54 @@ const useFileExplorer = () => {
             const response = await axios.get(`api/files/list-contents`, {
                 params: { path: path }
             });
-            return response.data.items;
+            const items = response.data.items;
+            setExplorerData(prev => ({
+                ...prev,
+                [path]: items
+            }));
         } catch (err) {
             console.error('Failed to fetch file list:', err);
             setError('파일 목록을 불러오는데 실패했습니다.');
-            return null;
         } finally {
             setLoading(false);
         }
     }, []);
 
-    // 초기 파일 목록 로드
-    useEffect(() => {
-        const loadInitialFiles = async () => {
-            const items = await fetchFolderContents('');
-            if (items) {
-                setFileList(items);
-            }
-        };
-        loadInitialFiles();
-    }, [fetchFolderContents]);
+    const navigateTo = useCallback(async (path, index) => {
+        setPathStack(pathStack.slice(0, index + 1));
+        setSelectedPath(path);
+        
+        if (!explorerData[path]) {
+            await fetchFolderContents(path);
+        }
+    }, [pathStack, explorerData, fetchFolderContents]);
 
-    const toggleFolder = useCallback(async (path) => {
-        const isExpanded = !!expandedFolders[path];
-        setExpandedFolders(prev => ({
-            ...prev,
-            [path]: !isExpanded
-        }));
+    const selectItem = useCallback(async (item, index) => {
+        setSelectedPath(item.path);
 
-        if (!isExpanded) {
-            // 폴더를 여는 경우에만 하위 콘텐츠를 로드
-            const children = await fetchFolderContents(path);
-            if (children) {
-                setFileList(prev => {
-                    const findAndInsertChildren = (items) => {
-                        return items.map(item => {
-                            if (item.path === path) {
-                                return { ...item, children: children };
-                            } else if (item.is_directory && item.children) {
-                                // 재귀적으로 하위 폴더 탐색
-                                return { ...item, children: findAndInsertChildren(item.children) };
-                            }
-                            return item;
-                        });
-                    };
-                    return findAndInsertChildren(prev);
-                });
+        if (item.is_directory) {
+            // 새 폴더를 클릭하면, 기존 스택에서 해당 레벨 이후의 경로를 제거
+            const newStack = pathStack.slice(0, index + 1);
+            setPathStack([...newStack, item.path]);
+            
+            if (!explorerData[item.path]) {
+                await fetchFolderContents(item.path);
             }
         }
-    }, [expandedFolders, fetchFolderContents]);
+    }, [pathStack, explorerData, fetchFolderContents]);
+
+    useEffect(() => {
+        fetchFolderContents('');
+    }, [fetchFolderContents]);
 
     return {
-        fileList,
+        pathStack,
+        explorerData,
         loading,
         error,
-        toggleFolder,
-        expandedFolders,
+        navigateTo,
+        selectItem,
+        selectedPath,
     };
 };
 
