@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const useFileExplorer = () => {
-    const [pathStack, setPathStack] = useState(['']); // 경로 스택
+    const [currentPath, setCurrentPath] = useState(''); // 현재 경로
+    const [pathHistory, setPathHistory] = useState(['']); // 경로 히스토리 (뒤로가기용)
     const [explorerData, setExplorerData] = useState({ '': [] }); // 경로별 파일 목록
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -28,41 +29,54 @@ const useFileExplorer = () => {
         }
     }, []);
 
-    const navigateTo = useCallback(async (path, index) => {
-        setPathStack(pathStack.slice(0, index + 1));
+    const navigateTo = useCallback(async (path) => {
+        setCurrentPath(path);
+        setPathHistory(prev => [...prev, path]);
         setSelectedPath(path);
         
         if (!explorerData[path]) {
             await fetchFolderContents(path);
         }
-    }, [pathStack, explorerData, fetchFolderContents]);
+    }, [explorerData, fetchFolderContents]);
 
-    const selectItem = useCallback(async (item, index) => {
+    const goBack = useCallback(async () => {
+        if (pathHistory.length > 1) {
+            const newHistory = pathHistory.slice(0, -1);
+            const previousPath = newHistory[newHistory.length - 1];
+            
+            setPathHistory(newHistory);
+            setCurrentPath(previousPath);
+            setSelectedPath(previousPath);
+            
+            if (!explorerData[previousPath]) {
+                await fetchFolderContents(previousPath);
+            }
+        }
+    }, [pathHistory, explorerData, fetchFolderContents]);
+
+    const selectItem = useCallback(async (item) => {
         setSelectedPath(item.path);
 
         if (item.is_directory) {
-            // 새 폴더를 클릭하면, 기존 스택에서 해당 레벨 이후의 경로를 제거
-            const newStack = pathStack.slice(0, index + 1);
-            setPathStack([...newStack, item.path]);
-            
-            if (!explorerData[item.path]) {
-                await fetchFolderContents(item.path);
-            }
+            await navigateTo(item.path);
         }
-    }, [pathStack, explorerData, fetchFolderContents]);
+    }, [navigateTo]);
 
     useEffect(() => {
         fetchFolderContents('');
     }, [fetchFolderContents]);
 
     return {
-        pathStack,
+        currentPath,
+        pathHistory,
         explorerData,
         loading,
         error,
         navigateTo,
         selectItem,
         selectedPath,
+        goBack,
+        canGoBack: pathHistory.length > 1,
     };
 };
 

@@ -40,6 +40,43 @@ export const StyledModalHeader = styled('div')({
     },
 });
 
+export const StyledPathDisplay = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '10px 0',
+    borderBottom: '1px solid #e0e0e0',
+    marginBottom: '15px',
+    fontSize: '14px',
+    color: '#666',
+    '& span': {
+        flex: 1,
+    },
+});
+
+export const StyledBackButton = styled('button')({
+    background: 'none',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    padding: '6px 10px',
+    cursor: 'pointer',
+    color: '#666',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '12px',
+    transition: 'all 0.2s ease',
+    '&:hover:not(:disabled)': {
+        backgroundColor: '#f5f5f5',
+        borderColor: '#999',
+        color: '#333',
+    },
+    '&:disabled': {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+    },
+});
+
 export const StyledModalBody = styled('div')({
     flexGrow: 1,
     overflowY: 'auto',

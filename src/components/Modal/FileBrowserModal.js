@@ -1,20 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { FaArrowLeft } from 'react-icons/fa';
 import useFileExplorer from '../../hooks/useFileExplorer';
 import FileList from '../FileList/FileList';
 import {
     StyledOverlay, StyledModal, StyledModalHeader, StyledModalBody, StyledCloseButton,
-    StyledMessage, StyledErrorMessage, StyledModalActions, StyledConfirmButton
+    StyledMessage, StyledErrorMessage, StyledModalActions, StyledConfirmButton,
+    StyledPathDisplay, StyledBackButton
 } from './FileBrowserModal.styled';
 
 const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelectPath }) => {
     const {
-        pathStack,
+        currentPath,
         explorerData,
         loading,
         error,
         selectItem,
         selectedPath,
+        goBack,
+        canGoBack,
     } = useFileExplorer();
 
     if (!isOpen) return null;
@@ -26,6 +30,11 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
         onClose();
     };
 
+    const formatPath = (path) => {
+        if (!path) return '루트';
+        return path.split('/').filter(Boolean).join(' / ');
+    };
+
     return ReactDOM.createPortal(
         <StyledOverlay onClick={onClose}>
             <StyledModal onClick={e => e.stopPropagation()}>
@@ -33,23 +42,31 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
                     <h2>{title}</h2>
                     <StyledCloseButton onClick={onClose}>&times;</StyledCloseButton>
                 </StyledModalHeader>
+                
+                <StyledPathDisplay>
+                    <StyledBackButton onClick={goBack} disabled={!canGoBack}>
+                        <FaArrowLeft />
+                    </StyledBackButton>
+                    <span>현재 경로: {formatPath(currentPath)}</span>
+                </StyledPathDisplay>
+
                 <StyledModalBody>
                     {loading && <StyledMessage>파일 목록을 불러오는 중입니다...</StyledMessage>}
                     {error && <StyledErrorMessage>오류 발생: {error}</StyledErrorMessage>}
 
-                    {!loading && !error && pathStack.map((path, index) => (
-                        <div key={path} style={{ flex: '1 1 250px', borderRight: '1px solid #e0e0e0', overflowY: 'auto' }}>
+                    {!loading && !error && (
+                        <div style={{ width: '100%', overflowY: 'auto' }}>
                             <FileList
-                                items={explorerData[path] || []}
-                                onNavigate={(item) => selectItem(item, index)}
+                                items={explorerData[currentPath] || []}
+                                onNavigate={selectItem}
                                 selectedPath={selectedPath}
                             />
                         </div>
-                    ))}
+                    )}
                 </StyledModalBody>
                 
                 <StyledModalActions>
-                    <p>선택된 경로: {selectedPath}</p>
+                    <p>선택된 경로: {selectedPath ? formatPath(selectedPath) : '선택되지 않음'}</p>
                     <StyledConfirmButton onClick={handleConfirm} disabled={!selectedPath}>완료</StyledConfirmButton>
                 </StyledModalActions>
             </StyledModal>
