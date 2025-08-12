@@ -9,7 +9,7 @@ import {
     StyledPathDisplay, StyledBackButton
 } from './FileBrowserModal.styled';
 
-const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelectPath }) => {
+const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelectPath, currentPathField }) => {
     const {
         currentPath,
         explorerData,
@@ -34,6 +34,9 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
         if (!path) return '루트';
         return path.split('/').filter(Boolean).join(' / ');
     };
+
+    // project 또는 venv 필드일 때 파일 선택 비활성화 (폴더만 선택 가능)
+    const disableFileSelection = currentPathField === 'project' || currentPathField === 'venv';
 
     return ReactDOM.createPortal(
         <StyledOverlay onClick={onClose}>
@@ -60,6 +63,7 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
                                 items={explorerData[currentPath] || []}
                                 onNavigate={selectItem}
                                 selectedPath={selectedPath}
+                                disableFileSelection={disableFileSelection}
                             />
                         </div>
                     )}

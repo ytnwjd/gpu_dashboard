@@ -236,6 +236,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 isOpen={isFileBrowserOpen}
                 onClose={handleCloseFileBrowser}
                 onSelectPath={handlePathSelect} // 경로 선택 콜백 전달
+                currentPathField={currentPathField}
                 title={currentPathField === 'project' ? '프로젝트 폴더 선택' :
                        currentPathField === 'venv' ? '가상 환경 폴더 선택' :
                        currentPathField === 'main' ? '메인 파일 선택' : '파일 탐색기'}
