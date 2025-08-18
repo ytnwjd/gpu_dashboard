@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import CustomCard from './CustomCard';
 
 import {
@@ -14,36 +14,54 @@ import {
 } from './InfoCard.style';
 
 const InfoCard = ({ gpuInfo }) => {
-    const gpu24gbTotal = 6;
-    const gpu8gbTotal = 12;
+    const GPU_CONFIG = {
+        gpu24gb: { total: 6, capacity: '24GB' },
+        gpu8gb: { total: 12, capacity: '8GB' }
+    };
 
-    const [gpuStatus, setGpuStatus] = useState({
-        gpu24gbActive: gpu24gbTotal,
-        gpu8gbActive: gpu8gbTotal,
-        gpu24gbAvailable: 0,
-        gpu8gbAvailable: 0,
+    const defaultGpuStatus = {
+        gpu24gbActive: 0,
+        gpu8gbActive: 0,
+        gpu24gbAvailable: GPU_CONFIG.gpu24gb.total,
+        gpu8gbAvailable: GPU_CONFIG.gpu8gb.total,
         jobsInQueue: 0
-    });
+    };
 
-    useEffect(() => {
-        if (gpuInfo) {
-            setGpuStatus(gpuInfo);
-        }
-    }, [gpuInfo]);
+    const gpuStatus = gpuInfo || defaultGpuStatus;
 
-    const gpu24gbIcons = Array.from({ length: gpu24gbTotal }, (_, index) => (
-        <StyledGpuIcon
-            key={`24gb-${index}`}
-            active={index < gpuStatus.gpu24gbActive}
-        />
-    ));
+    const createGpuIcons = (total, activeCount, capacity) => {
+        return Array.from({ length: total }, (_, index) => (
+            <StyledGpuIcon
+                key={`${capacity}-${index}`}
+                active={index < activeCount}
+            />
+        ));
+    };
 
-    const gpu8gbIcons = Array.from({ length: gpu8gbTotal }, (_, index) => (
-        <StyledGpuIcon
-            key={`8gb-${index}`}
-            active={index < gpuStatus.gpu8gbActive}
-        />
-    ));
+    const gpu24gbIcons = useMemo(() => 
+        createGpuIcons(GPU_CONFIG.gpu24gb.total, gpuStatus.gpu24gbActive, '24gb'),
+        [gpuStatus.gpu24gbActive]
+    );
+
+    const gpu8gbIcons = useMemo(() => 
+        createGpuIcons(GPU_CONFIG.gpu8gb.total, gpuStatus.gpu8gbActive, '8gb'),
+        [gpuStatus.gpu8gbActive]
+    );
+
+    const GpuGroup = ({ capacity, total, activeCount, icons }) => (
+        <StyledGpuGroupWrapper>
+            <StyledGpuLabel variant="body2">{capacity}</StyledGpuLabel>
+            <StyledGpuGridContainer>
+                {icons}
+            </StyledGpuGridContainer>
+        </StyledGpuGroupWrapper>
+    );
+
+    const InfoText = ({ label, value, total, unit = '' }) => (
+        <StyledInfoTypography variant="body1">
+            {label}: {value}{total ? `/${total}` : ''}{unit}
+        </StyledInfoTypography>
+    );
 
     const cardContent = (
         <StyledInfoContentWrapper>
@@ -52,31 +70,37 @@ const InfoCard = ({ gpuInfo }) => {
                     Available GPU
                 </StyledAvailableGpuText>
 
-                <StyledGpuGroupWrapper>
-                    <StyledGpuLabel variant="body2">24GB</StyledGpuLabel>
-                    <StyledGpuGridContainer>
-                        {gpu24gbIcons}
-                    </StyledGpuGridContainer>
-                </StyledGpuGroupWrapper>
+                <GpuGroup
+                    capacity={GPU_CONFIG.gpu24gb.capacity}
+                    total={GPU_CONFIG.gpu24gb.total}
+                    activeCount={gpuStatus.gpu24gbActive}
+                    icons={gpu24gbIcons}
+                />
 
-                <StyledGpuGroupWrapper>
-                    <StyledGpuLabel variant="body2">8GB</StyledGpuLabel>
-                    <StyledGpuGridContainer>
-                        {gpu8gbIcons}
-                    </StyledGpuGridContainer>
-                </StyledGpuGroupWrapper>
+                <GpuGroup
+                    capacity={GPU_CONFIG.gpu8gb.capacity}
+                    total={GPU_CONFIG.gpu8gb.total}
+                    activeCount={gpuStatus.gpu8gbActive}
+                    icons={gpu8gbIcons}
+                />
             </StyledLeftContent>
 
             <StyledTextContainer>
-                <StyledInfoTypography variant="body1">
-                    사용 중인 24GB GPU 개수: {gpuStatus.gpu24gbActive}/{gpu24gbTotal}
-                </StyledInfoTypography>
-                <StyledInfoTypography variant="body1">
-                    사용 중인 8GB GPU 개수: {gpuStatus.gpu8gbActive}/{gpu8gbTotal}
-                </StyledInfoTypography>
-                <StyledInfoTypography variant="body1">
-                    현재 {gpuStatus.jobsInQueue}개의 job이 대기 중입니다.
-                </StyledInfoTypography>
+                <InfoText
+                    label="사용 중인 24GB GPU 개수"
+                    value={gpuStatus.gpu24gbActive}
+                    total={GPU_CONFIG.gpu24gb.total}
+                />
+                <InfoText
+                    label="사용 중인 8GB GPU 개수"
+                    value={gpuStatus.gpu8gbActive}
+                    total={GPU_CONFIG.gpu8gb.total}
+                />
+                <InfoText
+                    label="현재 대기 중인 job"
+                    value={gpuStatus.jobsInQueue}
+                    unit="개"
+                />
             </StyledTextContainer>
         </StyledInfoContentWrapper>
     );
