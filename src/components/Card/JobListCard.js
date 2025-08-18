@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { TableRow } from '@mui/material';
 import CustomCard from './CustomCard'; // CustomCard 임포트
 
@@ -34,7 +34,7 @@ const JobListCard = ({ jobList }) => {
         { id: "actions", label: "Actions", width: 120 },
     ];
 
-    const jobListData = jobList || [];
+    const jobListData = useMemo(() => jobList || [], [jobList]);
 
     const formatTimestamp = useCallback((timestamp) => {
         if (!timestamp) return '-';
