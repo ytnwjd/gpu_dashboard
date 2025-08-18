@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import CustomCard from './CustomCard';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Clear as ClearIcon, FolderOpen as FolderOpenIcon } from '@mui/icons-material';
@@ -12,91 +12,95 @@ import ConfirmModal from '../Modal/ConfirmModal';
 import FileBrowserModal from '../Modal/FileBrowserModal';
 
 const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
+    const [formData, setFormData] = useState({
+        jobName: '',
+        projectPath: '',
+        venvPath: '',
+        mainFile: ''
+    });
 
-    const [jobName, setJobName] = useState('first job');
-    const [projectPath, setProjectPath] = useState('/home/workspace');
-    const [venvPath, setVenvPath] = useState('/home/workspace/.venv');
-    const [mainFile, setMainFile] = useState('/home/workspace/index.py');
-
-    const [openConfirmModal, setOpenConfirmModal] = useState(false); 
-    
-    // FileBrowserModal의 열림 상태 & 어떤 필드를 위한 모달인지 
+    const [openConfirmModal, setOpenConfirmModal] = useState(false);
     const [isFileBrowserOpen, setIsFileBrowserOpen] = useState(false);
     const [currentPathField, setCurrentPathField] = useState(null);
 
-    const handleClear = (setter) => () => {
-        setter('');
-    };
+    const updateFormData = useCallback((field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+    }, []);
 
-    const handleSaveButtonClick = () => {
+    const handleClear = useCallback((field) => () => {
+        updateFormData(field, '');
+    }, [updateFormData]);
+
+    const handleSaveButtonClick = useCallback(() => {
         setOpenConfirmModal(true);
-    };
+    }, []);
 
-    const handleConfirm = async () => {    
-        const jobData = {
-            jobName: jobName,
-            projectPath: projectPath,
-            venvPath: venvPath,
-            mainFile: mainFile
-        };
-    
+    const handleConfirm = useCallback(async () => {
         try {
-            const response = await fetch("api/jobs/", {
+            const response = await fetch("/api/jobs/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(jobData),
+                body: JSON.stringify(formData),
             });
-    
+
             const result = await response.json();
-            const finalResult = response.ok ? result : result.detail;
-    
-            if (response.ok && finalResult.code === 200) {
-                setOpenConfirmModal(false);
+            
+            if (response.ok && result.code === 200) {
                 if (onJobSubmitSuccess) {
-                    onJobSubmitSuccess({ message: finalResult.message, data: finalResult.data });
+                    onJobSubmitSuccess({ 
+                        message: result.message, 
+                        data: result.data 
+                    });
                 }
             } else {
-                const errorMessage = finalResult.message || `Job 생성에 실패했습니다. (코드: ${finalResult.code || response.status})`;
-                setOpenConfirmModal(false);
+                const errorMessage = result.message || `Job 생성에 실패했습니다. (코드: ${result.code || response.status})`;
                 if (onJobSubmitSuccess) {
                     onJobSubmitSuccess({ message: errorMessage, data: null });
                 }
             }
         } catch (error) {
-            setOpenConfirmModal(false);
             if (onJobSubmitSuccess) {
-                onJobSubmitSuccess({ message: "Job 생성 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요.", data: null });
+                onJobSubmitSuccess({ 
+                    message: "네트워크 오류가 발생했습니다. 연결을 확인해주세요.", 
+                    data: null 
+                });
             }
+        } finally {
+            setOpenConfirmModal(false);
         }
-    };
+    }, [formData, onJobSubmitSuccess]);
 
-    const handleCancelConfirmModal = () => {
-        setOpenConfirmModal(false);
-    };
-
-    const handleOpenFileBrowser = (field) => () => {
+    const handleOpenFileBrowser = useCallback((field) => () => {
         setCurrentPathField(field);
         setIsFileBrowserOpen(true);
-    };
+    }, []);
 
-    const handleCloseFileBrowser = () => {
+    const handleCloseFileBrowser = useCallback(() => {
         setIsFileBrowserOpen(false);
         setCurrentPathField(null);
-    };
+    }, []);
 
-    const handlePathSelect = (selectedPath) => {
-        if (currentPathField === 'project') {
-            setProjectPath(selectedPath);
-        } else if (currentPathField === 'venv') {
-            setVenvPath(selectedPath);
-        } else if (currentPathField === 'main') {
-            setMainFile(selectedPath);
+    const handlePathSelect = useCallback((selectedPath) => {
+        const fieldMap = {
+            'project': 'projectPath',
+            'venv': 'venvPath',
+            'main': 'mainFile'
+        };
+        
+        const field = fieldMap[currentPathField];
+        if (field) {
+            updateFormData(field, selectedPath);
         }
+        
         setIsFileBrowserOpen(false);
         setCurrentPathField(null);
-    };
+    }, [currentPathField, updateFormData]);
+
+    const handleCancelConfirmModal = useCallback(() => {
+        setOpenConfirmModal(false);
+    }, []);
 
     const formContent = (
         <StyledForm>
@@ -104,14 +108,14 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 label="job name"
                 variant="standard"
                 fullWidth
-                value={jobName}
+                value={formData.jobName}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="clear job name"
-                                onClick={handleClear(setJobName)}
+                                onClick={handleClear('jobName')}
                                 size="small"
                             >
                                 <ClearIcon />
@@ -119,20 +123,20 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => setJobName(e.target.value)}
+                onChange={(e) => updateFormData('jobName', e.target.value)}
             />
             <StyledTextField
                 label="프로젝트 folder path"
                 variant="standard"
                 fullWidth
-                value={projectPath}
+                value={formData.projectPath}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="open file browser"
-                                onClick={handleOpenFileBrowser('project')} // FileBrowserModal 열기
+                                onClick={handleOpenFileBrowser('project')}
                                 edge="end"
                                 size="small"
                             >
@@ -140,7 +144,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                             </IconButton>
                             <IconButton
                                 aria-label="clear project path"
-                                onClick={handleClear(setProjectPath)}
+                                onClick={handleClear('projectPath')}
                                 edge="end"
                                 size="small"
                             >
@@ -149,13 +153,13 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => setProjectPath(e.target.value)}
+                onChange={(e) => updateFormData('projectPath', e.target.value)}
             />
             <StyledTextField
                 label="venv folder path"
                 variant="standard"
                 fullWidth
-                value={venvPath}
+                value={formData.venvPath}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                     endAdornment: (
@@ -170,7 +174,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                             </IconButton>
                             <IconButton
                                 aria-label="clear venv path"
-                                onClick={handleClear(setVenvPath)}
+                                onClick={handleClear('venvPath')}
                                 edge="end"
                                 size="small"
                             >
@@ -179,20 +183,20 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => setVenvPath(e.target.value)}
+                onChange={(e) => updateFormData('venvPath', e.target.value)}
             />
             <StyledTextField
                 label="main file (ex. index.py)"
                 variant="standard"
                 fullWidth
-                value={mainFile}
+                value={formData.mainFile}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="open file browser"
-                                onClick={handleOpenFileBrowser('main')} 
+                                onClick={handleOpenFileBrowser('main')}
                                 edge="end"
                                 size="small"
                             >
@@ -200,7 +204,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                             </IconButton>
                             <IconButton
                                 aria-label="clear main file"
-                                onClick={handleClear(setMainFile)}
+                                onClick={handleClear('mainFile')}
                                 edge="end"
                                 size="small"
                             >
@@ -209,7 +213,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => setMainFile(e.target.value)}
+                onChange={(e) => updateFormData('mainFile', e.target.value)}
             />
         </StyledForm>
     );
@@ -230,15 +234,16 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 onClose={handleCancelConfirmModal}
                 onConfirm={handleConfirm}
                 gpuInfo={gpuInfo}
+                jobData={formData}
             />
 
             <FileBrowserModal
                 isOpen={isFileBrowserOpen}
                 onClose={handleCloseFileBrowser}
-                onSelectPath={handlePathSelect} // 경로 선택 콜백 전달
+                onSelectPath={handlePathSelect}
                 currentPathField={currentPathField}
                 title={currentPathField === 'project' ? '프로젝트 폴더 선택' :
-                       currentPathField === 'venv' ? '가상 환경 폴더 선택' :
+                       currentPathField === 'venv' ? '가상환경 폴더 선택' :
                        currentPathField === 'main' ? '메인 파일 선택' : '파일 탐색기'}
             />
         </>
