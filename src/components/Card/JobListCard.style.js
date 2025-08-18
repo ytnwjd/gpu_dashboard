@@ -37,8 +37,23 @@ export const StyledCardContent = styled(CardContent)(() => ({
 
 export const StyledTableContainer = styled(Box)({
     width: '100%',
-    height: '100%',
-    overflowY: 'auto',
+    height: '300px', 
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    '&::-webkit-scrollbar': {
+        width: '8px',
+    },
+    '&::-webkit-scrollbar-track': {
+        background: '#f1f1f1',
+        borderRadius: '4px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+        background: '#888',
+        borderRadius: '4px',
+        '&:hover': {
+            background: '#555',
+        },
+    },
 });
 
 export const StyledTable = styled(Table)({
