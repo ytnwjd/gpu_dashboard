@@ -12,11 +12,14 @@ const MainPage = () => {
 
     const fetchJobs = async () => {
         try {
+            // console.log('fetchJobs 호출됨');
             const jobsResponse = await fetch('/api/jobs/');
             if (jobsResponse.ok) {
                 const jobsData = await jobsResponse.json();
+                // console.log('받은 jobs 데이터:', jobsData);
                 if (jobsData.code === 200 && jobsData.data) {                
                     setJobList(jobsData.data);
+                    // console.log('jobList 업데이트됨:', jobsData.data);
                 } else {
                     setJobList([]);
                 }
@@ -24,6 +27,7 @@ const MainPage = () => {
                 throw new Error(`HTTP error! status: ${jobsResponse.status}`);
             }
         } catch (error) {
+            // console.error('fetchJobs 오류:', error);
             setJobList([]);
         }
     };
@@ -52,9 +56,13 @@ const MainPage = () => {
     }, []);
 
     const handleJobSubmitSuccess = ({message, data}) => {
+        //console.log('handleJobSubmitSuccess 호출됨:', {message, data});
         setShowDescription(true);
-        if (data && typeof data === 'object' && data.id !== undefined) {
+        if (data && typeof data === 'object' && (data.id !== undefined || data._id !== undefined)) {
             setJobList(prevJobList => [data, ...prevJobList]);
+            // console.log('Job 생성 성공');
+            fetchJobs();
+            fetchGpuInfo();
         } 
         setDescriptionText(message);
     };
