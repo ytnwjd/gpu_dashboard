@@ -136,7 +136,11 @@ const JobListCard = ({ jobList }) => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const responseData = await response.json();
             if (responseData.code === 200 && responseData.data) {
-                setSelectedJobDetail(responseData.data);
+                const formattedData = {
+                    ...responseData.data,
+                    timestamp: formatTimestamp(responseData.data.timestamp)
+                };
+                setSelectedJobDetail(formattedData);
                 setDetailModalOpen(true);
             } else {
                 alert(`Job 상세 정보 불러오기에 실패했습니다.`);
@@ -144,7 +148,7 @@ const JobListCard = ({ jobList }) => {
         } catch (error) {
             alert(`Job 상세 정보 불러오기 중 오류 발생: ${error.message}`);
         }
-    }, []);
+    }, [formatTimestamp]);
 
     const handleDetailModalClose = useCallback(() => {
         setDetailModalOpen(false);
