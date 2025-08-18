@@ -40,12 +40,12 @@ const InfoCard = ({ gpuInfo }) => {
 
     const gpu24gbIcons = useMemo(() => 
         createGpuIcons(GPU_CONFIG.gpu24gb.total, gpuStatus.gpu24gbActive, '24gb'),
-        [gpuStatus.gpu24gbActive]
+        [gpuStatus.gpu24gbActive, GPU_CONFIG.gpu24gb.total]
     );
 
     const gpu8gbIcons = useMemo(() => 
         createGpuIcons(GPU_CONFIG.gpu8gb.total, gpuStatus.gpu8gbActive, '8gb'),
-        [gpuStatus.gpu8gbActive]
+        [gpuStatus.gpu8gbActive, GPU_CONFIG.gpu8gb.total]
     );
 
     const GpuGroup = ({ capacity, total, activeCount, icons }) => (
