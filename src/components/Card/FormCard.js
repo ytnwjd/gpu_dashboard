@@ -48,6 +48,13 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
             const result = await response.json();
             
             if (response.ok && result.code === 200) {
+                setFormData({
+                    jobName: '',
+                    projectPath: '',
+                    venvPath: '',
+                    mainFile: ''
+                });
+                
                 if (onJobSubmitSuccess) {
                     onJobSubmitSuccess({ 
                         message: result.message, 
