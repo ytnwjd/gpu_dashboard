@@ -18,15 +18,7 @@ import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";
 import JobDetailModal from '../Modal/JobDetailModal';
 
-const JobListCard = ({ jobList: initialJobList, setJobList }) => {
-  
-    const [jobList, setInternalJobList] = useState(initialJobList || []);
-    
-    useEffect(() => {
-        setInternalJobList(initialJobList);
-    }, [initialJobList]);
-
-
+const JobListCard = ({ jobList }) => {
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [jobToEdit, setJobToEdit] = useState(null);
     const [detailModalOpen, setDetailModalOpen] = useState(false);
@@ -42,11 +34,12 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
         { id: "actions", label: "Actions", width: 120 },
     ];
 
+    const jobListData = jobList || [];
+
     const formatTimestamp = useCallback((timestamp) => {
         if (!timestamp) return '-';
         
         try {
-            console.log(timestamp);
             const date = new Date(timestamp);
             if (isNaN(date.getTime())) return '-';
             
@@ -74,13 +67,13 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
     }, []);
 
     const handleShowLogsClick = useCallback((jobId) => {
-        const job = jobList.find(j => j.id === jobId);
+        const job = jobListData.find(j => (j._id || j.id) === jobId);
         if (job) {
             setCurrentJobLogs(job.log ? [job.log] : []);
             setCurrentJobName(job.jobName);
             setDrawerOpen(true);
         }
-    }, [jobList]);
+    }, [jobListData]);
 
     const handleDrawerClose = useCallback(() => {
         setDrawerOpen(false);
@@ -89,48 +82,29 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
     }, []);
 
     const handleEditJob = useCallback((jobId) => {
-        const job = jobList.find(j => j.id === jobId);
+        const job = jobListData.find(j => (j._id || j.id) === jobId);
         if (job) {
             setJobToEdit(job);
             setEditModalOpen(true);
         }
-    }, [jobList]);
+    }, [jobListData]);
 
     const handleEditModalClose = useCallback(() => {
         setEditModalOpen(false);
         setJobToEdit(null);
     }, []);
 
-    const refreshJobList = useCallback(async () => {
-        try {
-            const response = await fetch('/api/jobs/');
-            if (!response.ok) throw new Error('Failed to fetch job list');
-            const data = await response.json();
-            if (data.code === 200) {
-                setInternalJobList(data.data);
-                if (setJobList) { 
-                    setJobList(data.data);
-                }
-            } else {
-                console.error("Failed to refresh job list:", data.message);
-            }
-        } catch (error) {
-            console.error("Error refreshing job list:", error);
-        }
-    }, [setJobList]);
-
     const handleEditFormSubmit = useCallback(async (formData) => {
         if (!jobToEdit) return;
         try {
-            const response = await fetch(`/api/jobs/${jobToEdit.id}`, {
+            const response = await fetch(`/api/jobs/${jobToEdit._id || jobToEdit.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
             const responseData = await response.json();
             if (response.ok && responseData.code === 200) {
-                alert(`작업 ID: ${jobToEdit.id} 수정에 성공했습니다.`);
-                refreshJobList();
+                alert(`작업 ID: ${jobToEdit._id || jobToEdit.id} 수정에 성공했습니다.`);
                 handleEditModalClose();
             } else {
                 alert(`작업 수정 실패: ${responseData.message || '알 수 없는 오류'}`);
@@ -138,7 +112,7 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
         } catch (error) {
             alert(`작업 수정 중 오류 발생: ${error.message}`);
         }
-    }, [jobToEdit, refreshJobList, handleEditModalClose]);
+    }, [jobToEdit, handleEditModalClose]);
 
     const handleDeleteJob = useCallback(async (jobId) => {
         if (!window.confirm(`작업을 삭제하시겠습니까?`)) return;
@@ -148,14 +122,13 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
             const result = await response.json();
             if (response.ok && result.code === 200) {
                 alert(result.message);
-                refreshJobList();
             } else {
                 alert(result.message || `Job 삭제에 실패했습니다.`);
             }
         } catch (error) {
             alert(`Job 삭제 중 오류가 발생했습니다.`);
         }
-    }, [refreshJobList]);
+    }, []);
 
     const handleRowClick = useCallback(async (jobId) => {
         try {
@@ -194,19 +167,19 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
                     </TableRow>
                 </StyledTableHead>
                 <StyledTableBody>
-                    {jobList.length === 0 ? (
+                    {jobListData.length === 0 ? (
                         <TableRow>
                             <StyledMessageTableCell colSpan={headers.length}>
                                 <StyledMessageTypography variant="body1">
-                                    등록된 작업이 없습니다.
+                                    등록된 Job이 없습니다.
                                 </StyledMessageTypography>
                             </StyledMessageTableCell>
                         </TableRow>
                     ) : (
-                        jobList.map((job) => (
+                        jobListData.map((job) => (
                             <TableRow
-                                key={job.id}
-                                onClick={() => handleRowClick(job.id)}
+                                key={job._id || job.id}
+                                onClick={() => handleRowClick(job._id || job.id)}
                                 sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
                             >
                                 <StyledBodyTableCell>
@@ -230,7 +203,7 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
                                     {job.status === "pending" && (
                                         <StyledTextButton
                                             variant="body2"
-                                            onClick={() => handleEditJob(job.id)}
+                                            onClick={() => handleEditJob(job._id || job.id)}
                                             sx={{ whiteSpace: 'nowrap' }}
                                         >
                                             수정
@@ -239,7 +212,7 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
                                     {(job.status === "completed" || job.status === "failed") && (
                                         <StyledTextButton
                                             variant="body2"
-                                            onClick={() => handleDeleteJob(job.id)}
+                                            onClick={() => handleDeleteJob(job._id || job.id)}
                                             sx={{ color: 'red', whiteSpace: 'nowrap' }}
                                         >
                                             삭제
@@ -248,7 +221,7 @@ const JobListCard = ({ jobList: initialJobList, setJobList }) => {
                                     {job.status === "running" && (
                                         <StyledTextButton
                                             variant="body2"
-                                            onClick={() => handleShowLogsClick(job.id)}
+                                            onClick={() => handleShowLogsClick(job._id || job.id)}
                                         >
                                             show logs
                                         </StyledTextButton>
