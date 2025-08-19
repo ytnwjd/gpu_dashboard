@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledBreadcrumbsContainer, StyledBreadcrumbItem, StyledSeparator } from './Breadcrumbs.styled';
+import './Breadcrumbs.css';
 
 const Breadcrumbs = ({ currentPath, onNavigate }) => {
     // currentPath가 '/'로 시작하는 경우를 위해 filter 전에 split을 조정합니다.
@@ -17,19 +17,20 @@ const Breadcrumbs = ({ currentPath, onNavigate }) => {
     };
 
     return (
-        <StyledBreadcrumbsContainer>
-            <StyledBreadcrumbItem onClick={() => onNavigate('')}>Root</StyledBreadcrumbItem>
+        <div className="breadcrumbs-container">
+            <span className="breadcrumb-item" onClick={() => onNavigate('')}>Root</span>
             {pathSegments.map((segment, index) => (
                 <React.Fragment key={index}>
-                    <StyledSeparator>/</StyledSeparator>
-                    <StyledBreadcrumbItem
+                    <span className="breadcrumb-separator">/</span>
+                    <span
+                        className="breadcrumb-item"
                         onClick={() => handleSegmentClick(index)}
                     >
                         {segment}
-                    </StyledBreadcrumbItem>
+                    </span>
                 </React.Fragment>
             ))}
-        </StyledBreadcrumbsContainer>
+        </div>
     );
 };
 
