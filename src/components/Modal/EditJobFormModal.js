@@ -1,23 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { IconButton } from '@mui/material'; 
+import { IconButton, Dialog, DialogTitle, DialogContent, InputAdornment, TextField } from '@mui/material'; 
 import CloseIcon from '@mui/icons-material/Close';
 import { Clear as ClearIcon } from '@mui/icons-material';
-
-import {
-    StyledForm,
-    StyledTextField
-} from '../Card/FormCard.style'; 
+import './EditJobFormModal.css';
+import '../Card/FormCard.css';
 
 import RoundedButton from "../Button/RoundedButton";
-
-import {
-    StyledDialog,
-    StyledDialogTitle,
-    StyledDialogContent,
-    StyledCloseIconButton,
-    StyledButtonContainer,
-    StyledInputAdornment
-} from './EditJobFormModal.style'; 
 
 const EditJobFormModal = ({ initialData, open, onClose, onSave }) => { 
     
@@ -52,26 +40,29 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
     };
 
     return (
-        <StyledDialog
+        <Dialog
+            className="edit-job-dialog"
             open={open}
             onClose={onClose}
             maxWidth="sm"
             fullWidth
         >
-            <StyledDialogTitle>
+            <DialogTitle className="edit-job-dialog-title">
                 작업 수정
-                <StyledCloseIconButton
+                <IconButton
+                    className="edit-job-close-icon-button"
                     aria-label="close"
                     onClick={onClose}
                 >
                     <CloseIcon />
-                </StyledCloseIconButton>
-            </StyledDialogTitle>
-            <StyledDialogContent dividers> 
+                </IconButton>
+            </DialogTitle>
+            <DialogContent className="edit-job-dialog-content" dividers> 
                 {initialData ? (
                     <div style={{ padding: '10px' }}> 
-                        <StyledForm>
-                            <StyledTextField
+                        <form className="form-card-form">
+                            <TextField
+                                className="form-card-text-field"
                                 label="job name"
                                 variant="standard"
                                 fullWidth
@@ -79,7 +70,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
                                     endAdornment: (
-                                        <StyledInputAdornment position="end"> 
+                                        <InputAdornment position="end"> 
                                             <IconButton
                                                 aria-label="clear job name"
                                                 onClick={handleClear(setJobName)}
@@ -87,12 +78,13 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                             >
                                                 <ClearIcon />
                                             </IconButton>
-                                        </StyledInputAdornment>
+                                        </InputAdornment>
                                     ),
                                 }}
                                 onChange={(e) => setJobName(e.target.value)}
                             />
-                            <StyledTextField
+                            <TextField
+                                className="form-card-text-field"
                                 label="프로젝트 folder path"
                                 variant="standard"
                                 fullWidth
@@ -100,7 +92,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
                                     endAdornment: (
-                                        <StyledInputAdornment position="end">
+                                        <InputAdornment position="end">
                                             <IconButton
                                                 aria-label="clear project path"
                                                 onClick={handleClear(setProjectPath)}
@@ -109,12 +101,13 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                             >
                                                 <ClearIcon />
                                             </IconButton>
-                                        </StyledInputAdornment>
+                                        </InputAdornment>
                                     ),
                                 }}
                                 onChange={(e) => setProjectPath(e.target.value)}
                             />
-                            <StyledTextField
+                            <TextField
+                                className="form-card-text-field"
                                 label="venv folder path"
                                 variant="standard"
                                 fullWidth
@@ -122,7 +115,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
                                     endAdornment: (
-                                        <StyledInputAdornment position="end">
+                                        <InputAdornment position="end">
                                             <IconButton
                                                 aria-label="clear venv path"
                                                 onClick={handleClear(setVenvPath)}
@@ -131,12 +124,13 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                             >
                                                 <ClearIcon />
                                             </IconButton>
-                                        </StyledInputAdornment>
+                                        </InputAdornment>
                                     ),
                                 }}
                                 onChange={(e) => setVenvPath(e.target.value)}
                             />
-                            <StyledTextField
+                            <TextField
+                                className="form-card-text-field"
                                 label="main file (ex. index.py)"
                                 variant="standard"
                                 fullWidth
@@ -144,7 +138,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
                                     endAdornment: (
-                                        <StyledInputAdornment position="end">
+                                        <InputAdornment position="end">
                                             <IconButton
                                                 aria-label="clear main file"
                                                 onClick={handleClear(setMainFile)}
@@ -153,13 +147,13 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                             >
                                                 <ClearIcon />
                                             </IconButton>
-                                        </StyledInputAdornment>
+                                        </InputAdornment>
                                     ),
                                 }}
                                 onChange={(e) => setMainFile(e.target.value)}
                             />
-                        </StyledForm>
-                        <StyledButtonContainer>
+                        </form>
+                        <div className="edit-job-button-container">
                             <RoundedButton
                                 label="취소" 
                                 state="enable"
@@ -170,13 +164,13 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 state="enable"
                                 onClick={handleSubmit}
                             />
-                        </StyledButtonContainer>
+                        </div>
                     </div>
                 ) : (
                     <p>작업 데이터를 불러오는 중...</p>
                 )}
-            </StyledDialogContent>
-        </StyledDialog>
+            </DialogContent>
+        </Dialog>
     );
 }
 

@@ -1,0 +1,51 @@
+.form-card-form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: auto;
+}
+
+.form-card-text-field {
+    margin-bottom: 32px;
+    position: relative;
+}
+
+.form-card-text-field .MuiInputBase-root {
+    background-color: #EEF7FF;
+    color: #0A1A28;
+    border-radius: 4px 4px 0 0;
+}
+
+.form-card-text-field .MuiInputBase-root:before {
+    border-bottom: 1px solid #0A1A28;
+}
+
+.form-card-text-field .MuiInputBase-root:after {
+    border-bottom: 2px solid black !important;
+}
+
+.form-card-text-field .MuiInputBase-input {
+    padding: 12px 14px;
+}
+
+.form-card-text-field .MuiInputLabel-root {
+    color: #A0A0A0;
+    font-size: 0.875rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding-left: 14px;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 28px);
+}
+
+.form-card-text-field .MuiInputLabel-shrink {
+    transform: none;
+}
+
+.form-card-text-field .MuiIconButton-root {
+    color: #A0A0A0;
+} 

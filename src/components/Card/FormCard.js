@@ -1,12 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import CustomCard from './CustomCard';
-import { IconButton, InputAdornment } from '@mui/material';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Clear as ClearIcon, FolderOpen as FolderOpenIcon } from '@mui/icons-material';
-
-import {
-    StyledForm,
-    StyledTextField
-} from './FormCard.style';
+import './FormCard.css';
 
 import ConfirmModal from '../Modal/ConfirmModal';
 import FileBrowserModal from '../Modal/FileBrowserModal';
@@ -110,8 +106,9 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
     }, []);
 
     const formContent = (
-        <StyledForm>
-            <StyledTextField
+        <form className="form-card-form">
+            <TextField
+                className="form-card-text-field"
                 label="job name"
                 variant="standard"
                 fullWidth
@@ -132,7 +129,8 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 }}
                 onChange={(e) => updateFormData('jobName', e.target.value)}
             />
-            <StyledTextField
+            <TextField
+                className="form-card-text-field"
                 label="프로젝트 folder path"
                 variant="standard"
                 fullWidth
@@ -162,7 +160,8 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 }}
                 onChange={(e) => updateFormData('projectPath', e.target.value)}
             />
-            <StyledTextField
+            <TextField
+                className="form-card-text-field"
                 label="venv folder path"
                 variant="standard"
                 fullWidth
@@ -192,7 +191,8 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 }}
                 onChange={(e) => updateFormData('venvPath', e.target.value)}
             />
-            <StyledTextField
+            <TextField
+                className="form-card-text-field"
                 label="main file (ex. index.py)"
                 variant="standard"
                 fullWidth
@@ -222,7 +222,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 }}
                 onChange={(e) => updateFormData('mainFile', e.target.value)}
             />
-        </StyledForm>
+        </form>
     );
 
     return (
