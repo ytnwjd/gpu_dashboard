@@ -1,16 +1,30 @@
 .custom-card {
     display: flex;
     flex-direction: column;
-    background-color: #fefefe;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .custom-card-header {
-    background-color: #E5F3A3;
-    padding: 12px 30px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    background-color: #d4e892;
+    padding: 20px 30px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    position: relative;
+}
+
+.custom-card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: rgba(131, 160, 0, 0.3);
 }
 
 .custom-header-content-divider {
@@ -37,6 +51,9 @@
 }
 
 .custom-card-actions {
-    padding: 10px;
+    padding: 20px 30px;
     justify-content: flex-end;
+    background-color: #fafafa;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
 } 
