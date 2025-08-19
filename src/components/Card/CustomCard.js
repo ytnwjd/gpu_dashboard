@@ -1,15 +1,14 @@
 import React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
-import RoundedButton from '../Button/RoundedButton';
-
 import {
-    StyledCard,
-    StyledCardHeader,
-    StyledHeaderContentDivider,
-    StyledCardContent,
-    StyledContentActionsDivider,
-    StyledCardActions,
-} from './CustomCard.style';
+    Card,
+    CardHeader,
+    CardContent,
+    CardActions,
+    Divider
+} from '@mui/material';
+import RoundedButton from '../Button/RoundedButton';
+import './CustomCard.css';
 
 const CustomCard = ({
                         title = null,
@@ -20,24 +19,30 @@ const CustomCard = ({
                         onButtonClick = () => {}
                     }) => {
     return (
-        <StyledCard width={width} height={height}>
+        <Card 
+            className="custom-card"
+            style={{ width, height }}
+        >
             {title && (
-                <StyledCardHeader title={title} />
+                <CardHeader 
+                    className="custom-card-header"
+                    title={title} 
+                />
             )}
 
-            <StyledHeaderContentDivider />
+            <Divider className="custom-header-content-divider" />
 
             {content && (
-                <StyledCardContent>
+                <CardContent className="custom-card-content">
                     {content}
-                </StyledCardContent>
+                </CardContent>
             )}
 
             {label && (
                 <>
-                    <StyledContentActionsDivider />
+                    <Divider className="custom-content-actions-divider" />
 
-                    <StyledCardActions>
+                    <CardActions className="custom-card-actions">
                         <RoundedButton
                             label={label}
                             width="80px"
@@ -46,11 +51,11 @@ const CustomCard = ({
                             onClick={onButtonClick}
                             icon={<CheckIcon sx={{ fontSize: 20, marginRight: 1 }} />}
                         />
-                    </StyledCardActions>
+                    </CardActions>
                 </>
             )}
 
-        </StyledCard>
+        </Card>
     );
 };
 

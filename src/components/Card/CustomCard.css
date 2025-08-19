@@ -1,0 +1,37 @@
+.custom-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fefefe;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+.custom-card-header {
+    background-color: #E5F3A3;
+    padding: 12px 30px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.custom-header-content-divider {
+    background-color: #83A000;
+    height: 1px;
+    width: 100%;
+    align-self: center;
+}
+
+.custom-card-content {
+    flex-grow: 1;
+}
+
+.custom-content-actions-divider {
+    background-color: #e0e0e0;
+    height: 1px;
+    width: 100%;
+    align-self: center;
+}
+
+.custom-card-actions {
+    padding: 10px;
+    justify-content: flex-end;
+} 

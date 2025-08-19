@@ -1,16 +1,7 @@
 import React from 'react';
-import { Drawer, IconButton, Typography } from '@mui/material';
+import { Drawer, IconButton, Typography, Divider } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-
-import {
-    StyledDrawerPaper,
-    StyledDrawerHeader,
-    StyledDrawerTitle,
-    StyledDrawerContent,
-    StyledLogLine,
-} from './LogViewerDrawer.style';
-
-import { StyledHeaderContentDivider } from '../Card/CustomCard.style'
+import './LogViewerDrawer.css';
 
 const LogViewerDrawer = ({ open, onClose, jobName, logs }) => {
     return (
@@ -19,31 +10,31 @@ const LogViewerDrawer = ({ open, onClose, jobName, logs }) => {
             open={open}
             onClose={onClose}
             PaperProps={{
-                component: StyledDrawerPaper,
+                className: 'log-drawer-paper',
             }}
         >
-            <StyledDrawerHeader>
-                <StyledDrawerTitle variant="h6">
+            <div className="log-drawer-header">
+                <Typography className="log-drawer-title" variant="h6">
                     [{jobName}] logs
-                </StyledDrawerTitle>
+                </Typography>
                 <IconButton onClick={onClose} sx={{ color: '#0A1A28' }}>
                     <CloseIcon />
                 </IconButton>
-            </StyledDrawerHeader>
-            <StyledHeaderContentDivider sx={{ margin: '0 20px'}}/>
-            <StyledDrawerContent>
+            </div>
+            <Divider sx={{ backgroundColor: '#83A000', margin: '0 20px' }} />
+            <div className="log-drawer-content">
                 {logs.length > 0 ? (
                     logs.map((logLine, index) => (
-                        <StyledLogLine key={index} variant="body2">
+                        <Typography key={index} className="log-line" variant="body2">
                             {logLine}
-                        </StyledLogLine>
+                        </Typography>
                     ))
                 ) : (
                     <Typography variant="body1" sx={{ color: 'white', padding: '15px' }}>
                         로그 내용이 없습니다.
                     </Typography>
                 )}
-            </StyledDrawerContent>
+            </div>
         </Drawer>
     );
 };
