@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledPaginationContainer, StyledButton } from './Pagination.styled'; 
+import './Pagination.css';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     if (totalPages <= 1) return null;
@@ -10,29 +10,31 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     }
 
     return (
-        <StyledPaginationContainer>
-            <StyledButton
+        <div className="pagination-container">
+            <button
+                className="pagination-button"
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
             >
                 이전
-            </StyledButton>
+            </button>
             {pageNumbers.map(number => (
-                <StyledButton
+                <button
                     key={number}
+                    className={`pagination-button ${number === currentPage ? 'active' : ''}`}
                     onClick={() => onPageChange(number)}
-                    $isActive={number === currentPage} // `$isActive` prop 전달
                 >
                     {number}
-                </StyledButton>
+                </button>
             ))}
-            <StyledButton
+            <button
+                className="pagination-button"
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
             >
                 다음
-            </StyledButton>
-        </StyledPaginationContainer>
+            </button>
+        </div>
     );
 };
 
