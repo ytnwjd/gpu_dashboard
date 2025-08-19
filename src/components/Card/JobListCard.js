@@ -1,18 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { TableRow } from '@mui/material';
-import CustomCard from './CustomCard'; // CustomCard 임포트
-
-import {
-    StyledTableContainer,
-    StyledTable,
-    StyledTableHead,
-    StyledHeaderTableCell,
-    StyledTableBody,
-    StyledMessageTableCell,
-    StyledMessageTypography,
-    StyledBodyTableCell,
-    StyledTextButton,
-} from './JobListCard.style';
+import { TableRow, TableContainer, Table, TableHead, TableCell, TableBody, Typography } from '@mui/material';
+import CustomCard from './CustomCard';
+import './JobListCard.css';
 
 import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";
@@ -156,28 +145,30 @@ const JobListCard = ({ jobList }) => {
     }, []);
 
     const cardContent = (
-        <StyledTableContainer>
-            <StyledTable stickyHeader aria-label="job list table">
-                <StyledTableHead>
+        <TableContainer className="job-list-table-container">
+            <Table className="job-list-table" stickyHeader aria-label="job list table">
+                <TableHead>
                     <TableRow>
                         {headers.map((header) => (
-                            <StyledHeaderTableCell
+                            <TableCell
                                 key={header.id}
+                                className="job-list-header-cell"
+                                variant="head"
                                 sx={{ width: header.width || 'auto', flex: header.flex || 'none' }}
                             >
                                 {header.label}
-                            </StyledHeaderTableCell>
+                            </TableCell>
                         ))}
                     </TableRow>
-                </StyledTableHead>
-                <StyledTableBody>
+                </TableHead>
+                <TableBody>
                     {jobListData.length === 0 ? (
                         <TableRow>
-                            <StyledMessageTableCell colSpan={headers.length}>
-                                <StyledMessageTypography variant="body1">
+                            <TableCell className="job-list-message-cell" colSpan={headers.length}>
+                                <Typography variant="body1">
                                     등록된 Job이 없습니다.
-                                </StyledMessageTypography>
-                            </StyledMessageTableCell>
+                                </Typography>
+                            </TableCell>
                         </TableRow>
                     ) : (
                         jobListData.map((job) => (
@@ -186,57 +177,61 @@ const JobListCard = ({ jobList }) => {
                                 onClick={() => handleRowClick(job._id || job.id)}
                                 sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
                             >
-                                <StyledBodyTableCell>
+                                <TableCell className="job-list-body-cell">
                                     {formatTimestamp(job.timestamp)}
-                                </StyledBodyTableCell>
-                                <StyledBodyTableCell>
+                                </TableCell>
+                                <TableCell className="job-list-body-cell">
                                     {job.jobName}
-                                </StyledBodyTableCell>
-                                <StyledBodyTableCell>
+                                </TableCell>
+                                <TableCell className="job-list-body-cell">
                                     <span style={{ 
                                         color: getStatusColor(job.status),
                                         fontWeight: 'bold'
                                     }}>
                                         {job.status}
                                     </span>
-                                </StyledBodyTableCell>
-                                <StyledBodyTableCell 
+                                </TableCell>
+                                <TableCell 
+                                    className="job-list-body-cell"
                                     sx={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center'}}
                                     onClick={(e) => e.stopPropagation()} 
                                 >
                                     {job.status === "pending" && (
-                                        <StyledTextButton
+                                        <Typography
+                                            className="job-list-text-button"
                                             variant="body2"
                                             onClick={() => handleEditJob(job._id || job.id)}
                                             sx={{ whiteSpace: 'nowrap' }}
                                         >
                                             수정
-                                        </StyledTextButton>
+                                        </Typography>
                                     )}
                                     {(job.status === "completed" || job.status === "failed") && (
-                                        <StyledTextButton
+                                        <Typography
+                                            className="job-list-text-button"
                                             variant="body2"
                                             onClick={() => handleDeleteJob(job._id || job.id)}
                                             sx={{ color: 'red', whiteSpace: 'nowrap' }}
                                         >
                                             삭제
-                                        </StyledTextButton>
+                                        </Typography>
                                     )}
                                     {job.status === "running" && (
-                                        <StyledTextButton
+                                        <Typography
+                                            className="job-list-text-button"
                                             variant="body2"
                                             onClick={() => handleShowLogsClick(job._id || job.id)}
                                         >
                                             show logs
-                                        </StyledTextButton>
+                                        </Typography>
                                     )}
-                                </StyledBodyTableCell>
+                                </TableCell>
                             </TableRow>
                         ))
                     )}
-                </StyledTableBody>
-            </StyledTable>
-        </StyledTableContainer>
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 
     return (

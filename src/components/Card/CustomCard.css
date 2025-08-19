@@ -22,6 +22,11 @@
 
 .custom-card-content {
     flex-grow: 1;
+    padding: 0 !important;
+}
+
+.custom-card-content .MuiCardContent-root {
+    padding: 0 !important;
 }
 
 .custom-content-actions-divider {

@@ -1,0 +1,62 @@
+.job-list-table-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.job-list-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.job-list-table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.job-list-table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.job-list-table-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.job-list-table {
+    min-width: 650px;
+    table-layout: fixed;
+}
+
+.job-list-header-cell {
+    color: #ffffff !important;
+    font-weight: bold !important;
+    padding: 8px 12px !important;
+    text-align: center !important;
+    border-bottom: 1px solid #3C4756 !important;
+    background-color: #424242 !important;
+}
+
+.job-list-message-cell {
+    text-align: center;
+    padding-top: 104px;
+    padding-bottom: 104px;
+}
+
+.job-list-body-cell {
+    color: #0A1A28;
+    padding: 2px 8px;
+    text-align: center;
+}
+
+.job-list-text-button {
+    color: #0A1A28;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.job-list-text-button:hover {
+    color: black;
+} 
