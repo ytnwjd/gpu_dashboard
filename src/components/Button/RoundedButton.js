@@ -1,5 +1,6 @@
 import React from 'react';
-import StyledButton from './Button.style';
+import { Button } from '@mui/material';
+import './RoundedButton.css';
 
 const RoundedButton =  ({
                             label = null,
@@ -12,16 +13,15 @@ const RoundedButton =  ({
     const isEnabled = state === 'enable';
 
     return (
-        <StyledButton
-            width={width}
-            height={height}
+        <Button
+            className="rounded-button"
+            style={{ width, height }}
             disabled={!isEnabled}
-            isEnabled={isEnabled}
             onClick={onClick}
         >
             {icon && icon}
             {label}
-        </StyledButton>
+        </Button>
     );
 };
 
