@@ -55,42 +55,44 @@ const InfoCard = ({ gpuInfo }) => {
 
     const cardContent = (
         <Box className="info-content-wrapper">
-            <Box className="info-left-content">
-                <Typography className="info-available-gpu-text" variant="h6" sx={{ paddingLeft: '50px' }}>
-                    Available GPU
-                </Typography>
+            <Box className="info-main-content">
+                <Box className="info-left-content">
+                    <Typography className="info-available-gpu-text" variant="h6" sx={{ paddingLeft: '50px', marginBottom: '10px' }}>
+                        Available GPU
+                    </Typography>
 
-                <GpuGroup
-                    capacity={GPU_CONFIG.gpu24gb.capacity}
-                    total={GPU_CONFIG.gpu24gb.total}
-                    activeCount={gpuStatus.gpu24gbActive}
-                    icons={gpu24gbIcons}
-                />
+                    <GpuGroup
+                        capacity={GPU_CONFIG.gpu24gb.capacity}
+                        total={GPU_CONFIG.gpu24gb.total}
+                        activeCount={gpuStatus.gpu24gbActive}
+                        icons={gpu24gbIcons}
+                    />
 
-                <GpuGroup
-                    capacity={GPU_CONFIG.gpu8gb.capacity}
-                    total={GPU_CONFIG.gpu8gb.total}
-                    activeCount={gpuStatus.gpu8gbActive}
-                    icons={gpu8gbIcons}
-                />
-            </Box>
+                    <GpuGroup
+                        capacity={GPU_CONFIG.gpu8gb.capacity}
+                        total={GPU_CONFIG.gpu8gb.total}
+                        activeCount={gpuStatus.gpu8gbActive}
+                        icons={gpu8gbIcons}
+                    />
+                </Box>
 
-            <Box className="info-text-container">
-                <InfoText
-                    label="사용 중인 24GB GPU 개수"
-                    value={gpuStatus.gpu24gbActive}
-                    total={GPU_CONFIG.gpu24gb.total}
-                />
-                <InfoText
-                    label="사용 중인 8GB GPU 개수"
-                    value={gpuStatus.gpu8gbActive}
-                    total={GPU_CONFIG.gpu8gb.total}
-                />
-                <InfoText
-                    label="현재 대기 중인 job"
-                    value={gpuStatus.jobsInQueue}
-                    unit="개"
-                />
+                <Box className="info-text-container">
+                    <InfoText
+                        label="사용 중인 24GB GPU 개수"
+                        value={gpuStatus.gpu24gbActive}
+                        total={GPU_CONFIG.gpu24gb.total}
+                    />
+                    <InfoText
+                        label="사용 중인 8GB GPU 개수"
+                        value={gpuStatus.gpu8gbActive}
+                        total={GPU_CONFIG.gpu8gb.total}
+                    />
+                    <InfoText
+                        label="현재 대기 중인 job"
+                        value={gpuStatus.jobsInQueue}
+                        unit="개"
+                    />
+                </Box>
             </Box>
         </Box>
     );

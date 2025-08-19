@@ -1,6 +1,14 @@
 .info-content-wrapper {
     display: flex;
-    padding: 10px 20px 20px 20px;
+    padding: 25px 0px 20px 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-main-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
 }
 
 .info-left-content {
@@ -12,7 +20,6 @@
 .info-available-gpu-text {
     color: #143D60;
     font-size: 1.25rem;
-    margin-bottom: 10px;
     font-weight: bold;
 }
 
@@ -62,7 +69,6 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding-top: 25px;
     flex-grow: 1;
 }
 
