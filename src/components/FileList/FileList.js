@@ -1,10 +1,10 @@
 import React from 'react';
 import { FaFolder, FaFile, FaChevronRight } from 'react-icons/fa';
-import { StyledList, StyledFileItem, StyledFolderItem, StyledFileName, StyledFileIcon, StyledFolderArrow } from './FileList.styled';
+import './FileList.css';
 
 const FileList = ({ items, onNavigate, selectedPath, disableFileSelection = false }) => {
     return (
-        <StyledList>
+        <ul className="file-list">
             {items && items.map(item => {
                 const isSelected = item.path === selectedPath || `/${item.path}` === selectedPath;
                 const isFileDisabled = !item.is_directory && disableFileSelection;
@@ -12,37 +12,33 @@ const FileList = ({ items, onNavigate, selectedPath, disableFileSelection = fals
                 return (
                     <div key={item.path}>
                         {item.is_directory ? (
-                            <StyledFolderItem
+                            <div
+                                className={`folder-item ${isSelected ? 'selected' : ''}`}
                                 onClick={() => onNavigate(item)}
-                                isSelected={isSelected}
                             >
-                                <StyledFileIcon>
+                                <span className="file-icon">
                                     <FaFolder />
-                                </StyledFileIcon>
-                                <StyledFileName>{item.name}</StyledFileName>
-                                <StyledFolderArrow>
+                                </span>
+                                <span className="file-name">{item.name}</span>
+                                <span className="folder-arrow">
                                     <FaChevronRight />
-                                </StyledFolderArrow>
-                            </StyledFolderItem>
+                                </span>
+                            </div>
                         ) : (
-                            <StyledFileItem
+                            <li
+                                className={`file-item ${isSelected ? 'selected' : ''} ${isFileDisabled ? 'disabled' : ''}`}
                                 onClick={() => !isFileDisabled && onNavigate(item)}
-                                isSelected={isSelected}
-                                style={{
-                                    opacity: isFileDisabled ? 0.5 : 1,
-                                    cursor: isFileDisabled ? 'not-allowed' : 'pointer'
-                                }}
                             >
-                                <StyledFileIcon>
+                                <span className="file-icon">
                                     <FaFile />
-                                </StyledFileIcon>
-                                <StyledFileName>{item.name}</StyledFileName>
-                            </StyledFileItem>
+                                </span>
+                                <span className="file-name">{item.name}</span>
+                            </li>
                         )}
                     </div>
                 );
             })}
-        </StyledList>
+        </ul>
     );
 };
 
