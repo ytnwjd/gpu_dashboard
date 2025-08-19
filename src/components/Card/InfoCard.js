@@ -1,17 +1,7 @@
 import React, { useMemo } from 'react';
+import { Box, Typography } from '@mui/material';
 import CustomCard from './CustomCard';
-
-import {
-    StyledGpuIcon,
-    StyledInfoContentWrapper,
-    StyledLeftContent,
-    StyledAvailableGpuText,
-    StyledGpuGridContainer,
-    StyledTextContainer,
-    StyledInfoTypography,
-    StyledGpuGroupWrapper,
-    StyledGpuLabel,
-} from './InfoCard.style';
+import './InfoCard.css';
 
 const InfoCard = ({ gpuInfo }) => {
     const GPU_CONFIG = {
@@ -31,9 +21,9 @@ const InfoCard = ({ gpuInfo }) => {
 
     const createGpuIcons = (total, activeCount, capacity) => {
         return Array.from({ length: total }, (_, index) => (
-            <StyledGpuIcon
+            <Box
                 key={`${capacity}-${index}`}
-                active={index < activeCount}
+                className={`info-gpu-icon ${index < activeCount ? 'active' : ''}`}
             />
         ));
     };
@@ -49,26 +39,26 @@ const InfoCard = ({ gpuInfo }) => {
     );
 
     const GpuGroup = ({ capacity, total, activeCount, icons }) => (
-        <StyledGpuGroupWrapper>
-            <StyledGpuLabel variant="body2">{capacity}</StyledGpuLabel>
-            <StyledGpuGridContainer>
+        <Box className="info-gpu-group-wrapper">
+            <Typography className="info-gpu-label" variant="body2">{capacity}</Typography>
+            <Box className="info-gpu-grid-container">
                 {icons}
-            </StyledGpuGridContainer>
-        </StyledGpuGroupWrapper>
+            </Box>
+        </Box>
     );
 
     const InfoText = ({ label, value, total, unit = '' }) => (
-        <StyledInfoTypography variant="body1">
+        <Typography className="info-typography" variant="body1">
             {label}: {value}{total ? `/${total}` : ''}{unit}
-        </StyledInfoTypography>
+        </Typography>
     );
 
     const cardContent = (
-        <StyledInfoContentWrapper>
-            <StyledLeftContent>
-                <StyledAvailableGpuText variant="h6" sx={{ paddingLeft: '50px' }}>
+        <Box className="info-content-wrapper">
+            <Box className="info-left-content">
+                <Typography className="info-available-gpu-text" variant="h6" sx={{ paddingLeft: '50px' }}>
                     Available GPU
-                </StyledAvailableGpuText>
+                </Typography>
 
                 <GpuGroup
                     capacity={GPU_CONFIG.gpu24gb.capacity}
@@ -83,9 +73,9 @@ const InfoCard = ({ gpuInfo }) => {
                     activeCount={gpuStatus.gpu8gbActive}
                     icons={gpu8gbIcons}
                 />
-            </StyledLeftContent>
+            </Box>
 
-            <StyledTextContainer>
+            <Box className="info-text-container">
                 <InfoText
                     label="사용 중인 24GB GPU 개수"
                     value={gpuStatus.gpu24gbActive}
@@ -101,8 +91,8 @@ const InfoCard = ({ gpuInfo }) => {
                     value={gpuStatus.jobsInQueue}
                     unit="개"
                 />
-            </StyledTextContainer>
-        </StyledInfoContentWrapper>
+            </Box>
+        </Box>
     );
 
     return (
