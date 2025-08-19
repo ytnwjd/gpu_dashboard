@@ -99,7 +99,7 @@ const InfoCard = ({ gpuInfo }) => {
 
     return (
         <CustomCard
-            title="Wait Information"
+            title="GPU Information"
             content={cardContent}
             width='740px'
             height='290px'
