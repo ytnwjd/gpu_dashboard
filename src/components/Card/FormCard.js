@@ -110,7 +110,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
             <TextField
                 className="form-card-text-field"
                 label="job name"
-                variant="standard"
+                variant="outlined"
                 fullWidth
                 value={formData.jobName}
                 InputLabelProps={{ shrink: true }}
@@ -132,7 +132,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
             <TextField
                 className="form-card-text-field"
                 label="프로젝트 folder path"
-                variant="standard"
+                variant="outlined"
                 fullWidth
                 value={formData.projectPath}
                 InputLabelProps={{ shrink: true }}
@@ -163,7 +163,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
             <TextField
                 className="form-card-text-field"
                 label="venv folder path"
-                variant="standard"
+                variant="outlined"
                 fullWidth
                 value={formData.venvPath}
                 InputLabelProps={{ shrink: true }}
@@ -194,7 +194,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
             <TextField
                 className="form-card-text-field"
                 label="main file (ex. index.py)"
-                variant="standard"
+                variant="outlined"
                 fullWidth
                 value={formData.mainFile}
                 InputLabelProps={{ shrink: true }}
@@ -232,7 +232,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 content={formContent}
                 label="저장"
                 width='420px'
-                height='570px'
+                height='500px'
                 onButtonClick={handleSaveButtonClick}
             />
 
