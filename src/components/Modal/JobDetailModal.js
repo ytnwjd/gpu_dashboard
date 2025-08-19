@@ -1,60 +1,54 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
-import {
-    StyledDialog,
-    StyledDialogTitle,
-    StyledDialogContent,
-    StyledCloseIconButton,
-    StyledDetailBox,
-    StyledDetailTypography
-} from './JobDetailModal.style'; 
+import './JobDetailModal.css';
 
 const JobDetailModal = ({ open, onClose, jobDetail }) => {
     return (
-        <StyledDialog
+        <Dialog
+            className="job-detail-dialog"
             open={open}
             onClose={onClose}
             maxWidth="sm"
             fullWidth
         >
-            <StyledDialogTitle>
+            <DialogTitle className="job-detail-dialog-title">
                 Job 상세 정보
-                <StyledCloseIconButton
+                <IconButton
+                    className="job-detail-close-icon-button"
                     aria-label="close"
                     onClick={onClose}
                 >
                     <CloseIcon />
-                </StyledCloseIconButton>
-            </StyledDialogTitle>
-            <StyledDialogContent dividers>
+                </IconButton>
+            </DialogTitle>
+            <DialogContent className="job-detail-dialog-content" dividers>
                 {jobDetail ? (
-                    <StyledDetailBox>
-                        <StyledDetailTypography variant="body1">
+                    <div className="job-detail-box">
+                        <Typography className="job-detail-typography" variant="body1">
                             <strong>타임스탬프:</strong> {jobDetail.timestamp}
-                        </StyledDetailTypography>
-                        <StyledDetailTypography variant="body1">
+                        </Typography>
+                        <Typography className="job-detail-typography" variant="body1">
                             <strong>Job 이름:</strong> {jobDetail.jobName}
-                        </StyledDetailTypography>
-                        <StyledDetailTypography variant="body1">
+                        </Typography>
+                        <Typography className="job-detail-typography" variant="body1">
                             <strong>프로젝트 경로:</strong> {jobDetail.projectPath}
-                        </StyledDetailTypography>
-                        <StyledDetailTypography variant="body1">
+                        </Typography>
+                        <Typography className="job-detail-typography" variant="body1">
                             <strong>Venv 경로:</strong> {jobDetail.venvPath}
-                        </StyledDetailTypography>
-                        <StyledDetailTypography variant="body1">
+                        </Typography>
+                        <Typography className="job-detail-typography" variant="body1">
                             <strong>메인 파일:</strong> {jobDetail.mainFile}
-                        </StyledDetailTypography>
-                        <StyledDetailTypography variant="body1">
+                        </Typography>
+                        <Typography className="job-detail-typography" variant="body1">
                             <strong>상태:</strong> {jobDetail.status}
-                        </StyledDetailTypography>
-                    </StyledDetailBox>
+                        </Typography>
+                    </div>
                 ) : (
                     <Typography>상세 정보를 불러오는 중입니다...</Typography>
                 )}
-            </StyledDialogContent>
-        </StyledDialog>
+            </DialogContent>
+        </Dialog>
     );
 }
 

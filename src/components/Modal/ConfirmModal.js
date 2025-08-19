@@ -1,13 +1,6 @@
 import React from 'react';
-import { Dialog, Typography } from '@mui/material';
-
-import {
-    StyledDialogContent,
-    StyledDialogText,
-    StyledDialogActions,
-    StyledConfirmButton,
-    StyledCancelButton,
-} from './ConfirmModal.style';
+import { Dialog, Typography, DialogContent, DialogActions } from '@mui/material';
+import './ConfirmModal.css';
 
 const ConfirmModal = ({ open, onClose, onConfirm, gpuInfo }) => {
     const { gpu24gbAvailable = 0, gpu8gbAvailable = 0, jobsInQueue = 0 } = gpuInfo || {};
@@ -37,23 +30,23 @@ const ConfirmModal = ({ open, onClose, onConfirm, gpuInfo }) => {
                 }
             }}
         >
-            <StyledDialogContent>
-                <StyledDialogText variant="body1" id="confirm-dialog-description">
+            <DialogContent className="confirm-dialog-content">
+                <Typography className="confirm-dialog-text" variant="body1" id="confirm-dialog-description">
                     {dialogMessage}
                     <br />
-                </StyledDialogText>
+                </Typography>
                 <Typography variant="body2" sx={{ color: '#0A1A28', marginTop: '10px' }}>
                     현재 대기 중인 job은 {jobsInQueue}개입니다.
                 </Typography>
-            </StyledDialogContent>
-            <StyledDialogActions>
-                <StyledConfirmButton onClick={onConfirm}>
+            </DialogContent>
+            <DialogActions className="confirm-dialog-actions">
+                <button className="confirm-button" onClick={onConfirm}>
                     네
-                </StyledConfirmButton>
-                <StyledCancelButton onClick={onClose}>
+                </button>
+                <button className="cancel-button" onClick={onClose}>
                     아니오
-                </StyledCancelButton>
-            </StyledDialogActions>
+                </button>
+            </DialogActions>
         </Dialog>
     );
 };

@@ -3,11 +3,7 @@ import ReactDOM from 'react-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import useFileExplorer from '../../hooks/useFileExplorer';
 import FileList from '../FileList/FileList';
-import {
-    StyledOverlay, StyledModal, StyledModalHeader, StyledModalBody, StyledCloseButton,
-    StyledMessage, StyledErrorMessage, StyledModalActions, StyledConfirmButton,
-    StyledPathDisplay, StyledBackButton
-} from './FileBrowserModal.styled';
+import './FileBrowserModal.css';
 
 const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelectPath, currentPathField }) => {
     const {
@@ -39,23 +35,23 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
     const disableFileSelection = currentPathField === 'project' || currentPathField === 'venv';
 
     return ReactDOM.createPortal(
-        <StyledOverlay onClick={onClose}>
-            <StyledModal onClick={e => e.stopPropagation()}>
-                <StyledModalHeader>
+        <div className="file-browser-overlay" onClick={onClose}>
+            <div className="file-browser-modal" onClick={e => e.stopPropagation()}>
+                <div className="file-browser-modal-header">
                     <h2>{title}</h2>
-                    <StyledCloseButton onClick={onClose}>&times;</StyledCloseButton>
-                </StyledModalHeader>
+                    <button className="file-browser-close-button" onClick={onClose}>&times;</button>
+                </div>
                 
-                <StyledPathDisplay>
-                    <StyledBackButton onClick={goBack} disabled={!canGoBack}>
+                <div className="file-browser-path-display">
+                    <button className="file-browser-back-button" onClick={goBack} disabled={!canGoBack}>
                         <FaArrowLeft />
-                    </StyledBackButton>
+                    </button>
                     <span>현재 경로: {formatPath(currentPath)}</span>
-                </StyledPathDisplay>
+                </div>
 
-                <StyledModalBody>
-                    {loading && <StyledMessage>파일 목록을 불러오는 중입니다...</StyledMessage>}
-                    {error && <StyledErrorMessage>오류 발생: {error}</StyledErrorMessage>}
+                <div className="file-browser-modal-body">
+                    {loading && <p className="file-browser-message">파일 목록을 불러오는 중입니다...</p>}
+                    {error && <p className="file-browser-error-message">오류 발생: {error}</p>}
 
                     {!loading && !error && (
                         <div style={{ width: '100%', overflowY: 'auto' }}>
@@ -67,14 +63,14 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
                             />
                         </div>
                     )}
-                </StyledModalBody>
+                </div>
                 
-                <StyledModalActions>
+                <div className="file-browser-modal-actions">
                     <p>선택된 경로: {selectedPath ? formatPath(selectedPath) : '선택되지 않음'}</p>
-                    <StyledConfirmButton onClick={handleConfirm} disabled={!selectedPath}>완료</StyledConfirmButton>
-                </StyledModalActions>
-            </StyledModal>
-        </StyledOverlay>,
+                    <button className="file-browser-confirm-button" onClick={handleConfirm} disabled={!selectedPath}>완료</button>
+                </div>
+            </div>
+        </div>,
         document.getElementById('modal-root')
     );
 };
