@@ -64,12 +64,10 @@
 .form-card-form {
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 30px 20px;
     margin: auto;
-    gap: 20px;
-    justify-content: center;
+    gap: 40px;
     align-items: center;
-    height: 100%;
 }
 
 .form-card-text-field {
