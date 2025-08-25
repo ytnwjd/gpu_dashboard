@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { IconButton, Dialog, DialogTitle, DialogContent, InputAdornment, TextField } from '@mui/material'; 
 import CloseIcon from '@mui/icons-material/Close';
 import { Clear as ClearIcon } from '@mui/icons-material';
-import './EditJobFormModal.css';
+import './Modal.css';
 import '../../components/Card/Card.css';
 
 import RoundedButton from "../Button/RoundedButton";

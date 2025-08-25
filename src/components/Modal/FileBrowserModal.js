@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import useFileExplorer from '../../hooks/useFileExplorer';
 import FileList from '../FileList/FileList';
-import './FileBrowserModal.css';
+import './Modal.css';
 
 const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelectPath, currentPathField }) => {
     const {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import './JobDetailModal.css';
+import './Modal.css';
 
 const JobDetailModal = ({ open, onClose, jobDetail }) => {
     return (

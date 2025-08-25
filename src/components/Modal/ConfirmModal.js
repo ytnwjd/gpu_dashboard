@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, Typography, DialogContent, DialogActions } from '@mui/material';
-import './ConfirmModal.css';
+import './Modal.css';
 
 const ConfirmModal = ({ open, onClose, onConfirm, gpuInfo }) => {
     const { gpu24gbAvailable = 0, gpu8gbAvailable = 0, jobsInQueue = 0 } = gpuInfo || {};

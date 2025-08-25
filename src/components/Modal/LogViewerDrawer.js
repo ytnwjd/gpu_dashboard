@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, IconButton, Typography, Divider } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import './LogViewerDrawer.css';
+import './Modal.css';
 
 const LogViewerDrawer = ({ open, onClose, jobName, logs }) => {
     return (
