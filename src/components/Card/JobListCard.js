@@ -18,7 +18,7 @@ const JobListCard = ({ jobList }) => {
 
     const headers = [
         { id: "timestamp", label: "생성 시간", width: 140 },
-        { id: "jobName", label: "Job 이름", flex: 1 },
+        { id: "jobName", label: "Job 이름", width: 'auto' },
         { id: "status", label: "Status", width: 80 },
         { id: "actions", label: "Actions", width: 120 },
     ];
@@ -146,7 +146,7 @@ const JobListCard = ({ jobList }) => {
 
     const cardContent = (
         <TableContainer className="job-list-table-container">
-            <Table className="job-list-table" stickyHeader aria-label="job list table">
+            <Table className="job-list-table" stickyHeader aria-label="job list table" sx={{ minHeight: 320 }}>
                 <TableHead>
                     <TableRow>
                         {headers.map((header) => (
@@ -154,7 +154,10 @@ const JobListCard = ({ jobList }) => {
                                 key={header.id}
                                 className="job-list-header-cell"
                                 variant="head"
-                                sx={{ width: header.width || 'auto', flex: header.flex || 'none' }}
+                                sx={{ 
+                                    width: header.width === 'auto' ? 'auto' : header.width,
+                                    flex: header.width === 'auto' ? 1 : 'none'
+                                }}
                             >
                                 {header.label}
                             </TableCell>
