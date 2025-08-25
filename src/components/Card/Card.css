@@ -1,0 +1,311 @@
+.custom-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.custom-card-header {
+    background-color: #d4e892;
+    padding: 20px 30px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    position: relative;
+}
+
+.custom-card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: rgba(131, 160, 0, 0.3);
+}
+
+.custom-header-content-divider {
+    background-color: #83A000;
+    height: 1px;
+    width: 100%;
+    align-self: center;
+    margin: 0;
+}
+
+.custom-card-content {
+    flex-grow: 1;
+    padding: 0 !important;
+}
+
+.custom-card-content .MuiCardContent-root {
+    padding: 0 !important;
+}
+
+.custom-content-actions-divider {
+    background-color: #e0e0e0;
+    height: 1px;
+    width: 100%;
+    align-self: center;
+    margin: 0;
+}
+
+.custom-card-actions {
+    padding: 20px 30px;
+    justify-content: flex-end;
+    background-color: #fafafa;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+/* ===== 폼 카드 스타일 ===== */
+.form-card-form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: auto;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.form-card-text-field {
+    margin-bottom: 0;
+    position: relative;
+}
+
+.form-card-text-field .MuiInputBase-root {
+    background-color: #f8f9fa;
+    color: #0A1A28;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+}
+
+.form-card-text-field .MuiInputBase-root:hover {
+    background-color: #f0f2f5;
+    border-color: #bdbdbd;
+}
+
+.form-card-text-field .MuiInputBase-root.Mui-focused {
+    background-color: #ffffff;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.form-card-text-field .MuiInputBase-root:before {
+    display: none;
+}
+
+.form-card-text-field .MuiInputBase-root:after {
+    display: none;
+}
+
+.form-card-text-field .MuiInputBase-input {
+    padding: 14px 16px;
+    font-size: 14px;
+}
+
+.form-card-text-field .MuiInputLabel-root {
+    color: #666666;
+    font-size: 14px;
+    font-weight: 500;
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    background-color: #ffffff;
+    padding: 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 24px);
+}
+
+.form-card-text-field .MuiInputLabel-shrink {
+    transform: none;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.form-card-text-field .MuiIconButton-root {
+    color: #666666;
+    transition: color 0.2s ease;
+}
+
+.form-card-text-field .MuiIconButton-root:hover {
+    color: #1976d2;
+    background-color: rgba(25, 118, 210, 0.08);
+}
+
+/* ===== 정보 카드 스타일 ===== */
+.info-content-wrapper {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-main-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.info-left-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-available-gpu-text {
+    color: #143D60;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.info-gpu-group-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.info-gpu-label {
+    color: #143D60;
+    width: 50px;
+    padding-right: 8px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.info-gpu-grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    width: calc(10px * 6 + 40px * 6);
+}
+
+.info-gpu-icon {
+    width: 28px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-gpu-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.2);
+    pointer-events: none;
+}
+
+.info-gpu-icon.active {
+    background-color: #F84C4C;
+    box-shadow: 0 2px 8px rgba(248, 76, 76, 0.3);
+}
+
+.info-gpu-icon:not(.active) {
+    background-color: #A0C878;
+    box-shadow: 0 2px 8px rgba(160, 200, 120, 0.2);
+}
+
+.info-gpu-icon:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.info-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.info-typography {
+    color: #143D60;
+}
+
+/* ===== 작업 목록 카드 스타일 ===== */
+.job-list-table-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.job-list-table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.job-list-table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.job-list-table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.job-list-table-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.job-list-table {
+    min-width: 650px;
+    table-layout: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+.job-list-header-cell {
+    color: #ffffff !important;
+    font-weight: bold !important;
+    padding: 8px 12px !important;
+    text-align: center !important;
+    border-bottom: 1px solid #3C4756 !important;
+    background-color: #424242 !important;
+    margin: 0 !important;
+}
+
+.job-list-message-cell {
+    text-align: center;
+    padding-top: 104px;
+    padding-bottom: 104px;
+}
+
+.job-list-body-cell {
+    color: #0A1A28;
+    padding: 2px 8px;
+    text-align: center;
+    margin: 0;
+}
+
+.job-list-text-button {
+    color: #0A1A28;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.job-list-text-button:hover {
+    color: black;
+}

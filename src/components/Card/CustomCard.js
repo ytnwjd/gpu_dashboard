@@ -8,7 +8,7 @@ import {
     Divider
 } from '@mui/material';
 import RoundedButton from '../Button/RoundedButton';
-import './CustomCard.css';
+import './Card.css';
 
 const CustomCard = ({
                         title = null,

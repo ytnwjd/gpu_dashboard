@@ -3,7 +3,7 @@ import { IconButton, Dialog, DialogTitle, DialogContent, InputAdornment, TextFie
 import CloseIcon from '@mui/icons-material/Close';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import './EditJobFormModal.css';
-import '../Card/FormCard.css';
+import '../../components/Card/Card.css';
 
 import RoundedButton from "../Button/RoundedButton";
 

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import CustomCard from './CustomCard';
-import './InfoCard.css';
+import './Card.css';
 
 const InfoCard = ({ gpuInfo }) => {
     const GPU_CONFIG = {

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { TableRow, TableContainer, Table, TableHead, TableCell, TableBody, Typography } from '@mui/material';
 import CustomCard from './CustomCard';
-import './JobListCard.css';
+import './Card.css';
 
 import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";

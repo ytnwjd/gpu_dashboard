@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import CustomCard from './CustomCard';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Clear as ClearIcon, FolderOpen as FolderOpenIcon } from '@mui/icons-material';
-import './FormCard.css';
+import './Card.css';
 
 import ConfirmModal from '../Modal/ConfirmModal';
 import FileBrowserModal from '../Modal/FileBrowserModal';
