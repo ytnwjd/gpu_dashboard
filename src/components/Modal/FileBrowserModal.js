@@ -54,7 +54,7 @@ const FileBrowserModal = ({ isOpen, onClose, title = "파일 탐색기", onSelec
                     {error && <p className="file-browser-error-message">오류 발생: {error}</p>}
 
                     {!loading && !error && (
-                        <div style={{ width: '100%', overflowY: 'auto' }}>
+                        <div style={{ width: '100%' }}>
                             <FileList
                                 items={explorerData[currentPath] || []}
                                 onNavigate={selectItem}

@@ -41,6 +41,19 @@
 }
 
 /* ===== 파일 브라우저 모달 스타일 ===== */
+.file-browser-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
 .file-browser-modal {
     background-color: #fefefe;
     padding: 20px;
@@ -48,7 +61,7 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 1000px;
-    max-height: 90%;
+    max-height: 90vh;
     overflow-y: auto;
     position: relative;
     display: flex;
@@ -112,6 +125,7 @@
     flex-grow: 1;
     overflow-y: auto;
     display: flex;
+    min-height: 0;
 }
 
 .file-browser-close-button {
