@@ -17,7 +17,7 @@ const JobListCard = ({ jobList }) => {
     const [currentJobName, setCurrentJobName] = useState('');
 
     const headers = [
-        { id: "timestamp", label: "생성 시간", width: 140 },
+        { id: "requested_at", label: "생성 시간", width: 140 },
         { id: "jobName", label: "Job 이름", width: 'auto' },
         { id: "status", label: "Status", width: 80 },
         { id: "actions", label: "Actions", width: 120 },
@@ -127,7 +127,7 @@ const JobListCard = ({ jobList }) => {
             if (responseData.code === 200 && responseData.data) {
                 const formattedData = {
                     ...responseData.data,
-                    timestamp: formatTimestamp(responseData.data.timestamp)
+                    requested_at: formatTimestamp(responseData.data.requested_at)
                 };
                 setSelectedJobDetail(formattedData);
                 setDetailModalOpen(true);
@@ -146,9 +146,9 @@ const JobListCard = ({ jobList }) => {
 
     const cardContent = (
         <TableContainer className="job-list-table-container">
-            <Table className="job-list-table" stickyHeader aria-label="job list table" sx={{ minHeight: 320 }}>
+            <Table className="job-list-table" stickyHeader aria-label="job list table">
                 <TableHead>
-                    <TableRow>
+                    <TableRow sx={{ height: '25px', '& th': { height: '25px' } }}>
                         {headers.map((header) => (
                             <TableCell
                                 key={header.id}
@@ -178,10 +178,15 @@ const JobListCard = ({ jobList }) => {
                             <TableRow
                                 key={job._id || job.id}
                                 onClick={() => handleRowClick(job._id || job.id)}
-                                sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
+                                sx={{ 
+                                    cursor: 'pointer', 
+                                    '&:hover': { backgroundColor: 'action.hover' },
+                                    height: '25px',
+                                    '& td': { height: '25px' }
+                                }}
                             >
                                 <TableCell className="job-list-body-cell">
-                                    {formatTimestamp(job.timestamp)}
+                                    {formatTimestamp(job.requested_at)}
                                 </TableCell>
                                 <TableCell className="job-list-body-cell">
                                     {job.jobName}
@@ -196,7 +201,14 @@ const JobListCard = ({ jobList }) => {
                                 </TableCell>
                                 <TableCell 
                                     className="job-list-body-cell"
-                                    sx={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center'}}
+                                    sx={{ 
+                                        display: 'flex', 
+                                        gap: '8px', 
+                                        justifyContent: 'center', 
+                                        alignItems: 'center',
+                                        height: '100%',
+                                        minHeight: '25px'
+                                    }}
                                     onClick={(e) => e.stopPropagation()} 
                                 >
                                     {job.status === "pending" && (
