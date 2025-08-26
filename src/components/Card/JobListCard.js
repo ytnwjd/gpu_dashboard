@@ -17,7 +17,7 @@ const JobListCard = ({ jobList }) => {
     const [currentJobName, setCurrentJobName] = useState('');
 
     const headers = [
-        { id: "requested_at", label: "생성 시간", width: 140 },
+        { id: "requested_at", label: "Job 요청 시간", width: 140 },
         { id: "jobName", label: "Job 이름", width: 'auto' },
         { id: "status", label: "Status", width: 80 },
         { id: "actions", label: "Actions", width: 120 },
@@ -127,7 +127,9 @@ const JobListCard = ({ jobList }) => {
             if (responseData.code === 200 && responseData.data) {
                 const formattedData = {
                     ...responseData.data,
-                    requested_at: formatTimestamp(responseData.data.requested_at)
+                    requested_at: formatTimestamp(responseData.data.requested_at),
+                    started_at: formatTimestamp(responseData.data.started_at),
+                    completed_at: formatTimestamp(responseData.data.completed_at)
                 };
                 setSelectedJobDetail(formattedData);
                 setDetailModalOpen(true);
