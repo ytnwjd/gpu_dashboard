@@ -269,8 +269,6 @@
     background: #555;
 }
 
-
-
 .job-list-table {
     min-width: 650px;
     width: 100%;
@@ -311,6 +309,9 @@
     line-height: 1;
     min-height: 25px;
     max-height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .job-list-text-button {

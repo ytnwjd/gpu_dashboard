@@ -188,10 +188,22 @@ const JobListCard = ({ jobList }) => {
                                 <TableCell className="job-list-body-cell">
                                     {formatTimestamp(job.requested_at)}
                                 </TableCell>
-                                <TableCell className="job-list-body-cell">
+                                <TableCell 
+                                    className="job-list-body-cell"
+                                    sx={{ 
+                                        textAlign: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                >
                                     {job.jobName}
                                 </TableCell>
-                                <TableCell className="job-list-body-cell">
+                                <TableCell 
+                                    className="job-list-body-cell"
+                                    sx={{ 
+                                        textAlign: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                >
                                     <span style={{ 
                                         color: getStatusColor(job.status),
                                         fontWeight: 'bold'
@@ -207,7 +219,8 @@ const JobListCard = ({ jobList }) => {
                                         justifyContent: 'center', 
                                         alignItems: 'center',
                                         height: '100%',
-                                        minHeight: '25px'
+                                        minHeight: '25px',
+                                        textAlign: 'center'
                                     }}
                                     onClick={(e) => e.stopPropagation()} 
                                 >
