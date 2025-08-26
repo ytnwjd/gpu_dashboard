@@ -255,7 +255,7 @@ const JobListCard = ({ jobList }) => {
                 title="GPU Job 실행 리스트"
                 content={cardContent}
                 width='740px'
-                height='400px'
+                height='470px'
             />
 
             <LogViewerDrawer
