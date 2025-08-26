@@ -26,7 +26,13 @@ const JobDetailModal = ({ open, onClose, jobDetail }) => {
                 {jobDetail ? (
                     <div className="job-detail-box">
                         <Typography className="job-detail-typography" variant="body1">
-                            <strong>타임스탬프:</strong> {jobDetail.timestamp}
+                            <strong>작업 요청 시간:</strong> {jobDetail.requested_at}
+                        </Typography>
+                        <Typography className="job-detail-typography" variant="body1">
+                            <strong>작업 시작 시간:</strong> {jobDetail.started_at}
+                        </Typography>
+                        <Typography className="job-detail-typography" variant="body1">
+                            <strong>작업 종료 시간:</strong> {jobDetail.completed_at}
                         </Typography>
                         <Typography className="job-detail-typography" variant="body1">
                             <strong>Job 이름:</strong> {jobDetail.jobName}

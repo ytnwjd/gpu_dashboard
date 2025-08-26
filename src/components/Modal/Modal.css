@@ -184,6 +184,21 @@
 }
 
 /* ===== 작업 상세 모달 스타일 ===== */
+.job-detail-dialog-title {
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+}
+
+.job-detail-close-icon-button {
+    position: absolute !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
 .job-detail-box {
     padding: 16px;
 }
