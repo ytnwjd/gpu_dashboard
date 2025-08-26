@@ -55,12 +55,23 @@ const JobListCard = ({ jobList }) => {
         return colorMap[status] || '#000000';
     }, []);
 
-    const handleShowLogsClick = useCallback((jobId) => {
-        const job = jobListData.find(j => (j._id || j.id) === jobId);
-        if (job) {
-            setCurrentJobLogs(job.log ? [job.log] : []);
-            setCurrentJobName(job.jobName);
-            setDrawerOpen(true);
+    const handleShowLogsClick = useCallback(async (jobId) => {
+        try {
+            const response = await fetch(`/api/jobs/${jobId}/log`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const responseData = await response.json();
+            if (responseData.code === 200 && responseData.log_content) {
+                // 로그 내용을 줄별로 분리
+                const logLines = responseData.log_content.split('\n').filter(line => line.trim() !== '');
+                setCurrentJobLogs(logLines);
+                setCurrentJobName(`Job ${jobId} - ${responseData.file_name}`);
+                setDrawerOpen(true);
+            } else {
+                alert(`로그 파일을 불러올 수 없습니다: ${responseData.message}`);
+            }
+        } catch (error) {
+            alert(`로그 파일 불러오기 중 오류 발생: ${error.message}`);
         }
     }, [jobListData]);
 
