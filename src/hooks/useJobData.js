@@ -27,7 +27,7 @@ const useJobData = () => {
 
     const fetchGpuInfo = useCallback(async () => {
         try {
-            const gpuResponse = await fetch('/api/gpu/');
+            const gpuResponse = await fetch('/resource/gpu');
             if (gpuResponse.ok) {
                 const gpuData = await gpuResponse.json();
                 if (gpuData.code === 200 && gpuData.data) {
