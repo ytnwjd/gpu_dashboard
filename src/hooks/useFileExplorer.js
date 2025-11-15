@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const useFileExplorer = () => {
+const useFileExplorer = (user_id = 'yusujeong') => {
     const [currentPath, setCurrentPath] = useState(''); // 현재 경로
     const [pathHistory, setPathHistory] = useState(['']); // 경로 히스토리 (뒤로가기용)
     const [explorerData, setExplorerData] = useState({ '': [] }); // 경로별 파일 목록
@@ -13,7 +13,7 @@ const useFileExplorer = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`api/files/list-contents`, {
+            const response = await axios.get(`/user/${user_id}/file/list`, {
                 params: { path: path }
             });
             const items = response.data.items;
@@ -27,7 +27,7 @@ const useFileExplorer = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [user_id]);
 
     const navigateTo = useCallback(async (path) => {
         setCurrentPath(path);
