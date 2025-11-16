@@ -3,11 +3,13 @@ import CustomCard from './CustomCard';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Clear as ClearIcon, FolderOpen as FolderOpenIcon } from '@mui/icons-material';
 import './Card.css';
+import { useUser } from '../../contexts/UserContext';
 
 import ConfirmModal from '../Modal/ConfirmModal';
 import FileBrowserModal from '../Modal/FileBrowserModal';
 
 const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
+    const {user_id} = useUser();
     const [formData, setFormData] = useState({
         jobName: '',
         projectPath: '',
@@ -33,7 +35,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
 
     const handleConfirm = useCallback(async () => {
         try {
-            const response = await fetch("/api/jobs/", {
+            const response = await fetch(`/user/${user_id}/jobs/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -73,7 +75,7 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
         } finally {
             setOpenConfirmModal(false);
         }
-    }, [formData, onJobSubmitSuccess]);
+    }, [formData, onJobSubmitSuccess, user_id]);
 
     const handleOpenFileBrowser = useCallback((field) => () => {
         setCurrentPathField(field);

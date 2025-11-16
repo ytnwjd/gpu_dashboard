@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useUser } from '../contexts/UserContext';
 
 const useJobData = () => {
+    const { user_id } = useUser();
     const [gpuInfo, setGpuInfo] = useState(null);
     const [jobList, setJobList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -8,7 +10,7 @@ const useJobData = () => {
 
     const fetchJobs = useCallback(async () => {
         try {
-            const jobsResponse = await fetch('/api/jobs/');
+            const jobsResponse = await fetch(`/user/${user_id}/jobs/`);
             if (jobsResponse.ok) {
                 const jobsData = await jobsResponse.json();
                 if (jobsData.code === 200 && jobsData.data) {                
@@ -23,7 +25,7 @@ const useJobData = () => {
             setJobList([]);
             setError('Job 목록을 불러오는데 실패했습니다.');
         }
-    }, []);
+    }, [user_id]);
 
     const fetchGpuInfo = useCallback(async () => {
         try {

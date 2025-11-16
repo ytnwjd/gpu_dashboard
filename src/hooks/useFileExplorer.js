@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useUser } from '../contexts/UserContext';
 
-const useFileExplorer = (user_id = 'yusujeong') => {
+const useFileExplorer = () => {
+    const { user_id } = useUser();
     const [currentPath, setCurrentPath] = useState(''); // 현재 경로
     const [pathHistory, setPathHistory] = useState(['']); // 경로 히스토리 (뒤로가기용)
     const [explorerData, setExplorerData] = useState({ '': [] }); // 경로별 파일 목록

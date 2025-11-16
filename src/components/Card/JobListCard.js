@@ -2,12 +2,14 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { TableRow, TableContainer, Table, TableHead, TableCell, TableBody, Typography } from '@mui/material';
 import CustomCard from './CustomCard';
 import './Card.css';
+import { useUser } from '../../contexts/UserContext';
 
 import LogViewerDrawer from "../Modal/LogViewerDrawer";
 import EditJobFormModal from "../Modal/EditJobFormModal";
 import JobDetailModal from '../Modal/JobDetailModal';
 
 const JobListCard = ({ jobList }) => {
+    const {user_id} = useUser();
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [jobToEdit, setJobToEdit] = useState(null);
     const [detailModalOpen, setDetailModalOpen] = useState(false);
@@ -57,7 +59,7 @@ const JobListCard = ({ jobList }) => {
 
     const handleShowLogsClick = useCallback(async (jobId) => {
         try {
-            const response = await fetch(`/api/jobs/${jobId}/log`);
+            const response = await fetch(`/user/${user_id}/jobs?job_id=${jobId}&log=true`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             
             const responseData = await response.json();
@@ -73,7 +75,7 @@ const JobListCard = ({ jobList }) => {
         } catch (error) {
             alert(`로그 파일 불러오기 중 오류 발생: ${error.message}`);
         }
-    }, [jobListData]);
+    }, [jobListData, user_id]);
 
     const handleDrawerClose = useCallback(() => {
         setDrawerOpen(false);
@@ -97,7 +99,7 @@ const JobListCard = ({ jobList }) => {
     const handleEditFormSubmit = useCallback(async (formData) => {
         if (!jobToEdit) return;
         try {
-            const response = await fetch(`/api/jobs/${jobToEdit._id || jobToEdit.id}`, {
+            const response = await fetch(`/user/${user_id}/jobs?job_id=${jobToEdit._id || jobToEdit.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -112,13 +114,13 @@ const JobListCard = ({ jobList }) => {
         } catch (error) {
             alert(`작업 수정 중 오류 발생: ${error.message}`);
         }
-    }, [jobToEdit, handleEditModalClose]);
+    }, [jobToEdit, handleEditModalClose, user_id]);
 
     const handleDeleteJob = useCallback(async (jobId) => {
         if (!window.confirm(`작업을 삭제하시겠습니까?`)) return;
         
         try {
-            const response = await fetch(`/api/jobs/${jobId}`, { method: 'DELETE' });
+            const response = await fetch(`/user/${user_id}/jobs?job_id=${jobId}`, { method: 'DELETE' });
             const result = await response.json();
             if (response.ok && result.code === 200) {
                 alert(result.message);
@@ -128,11 +130,15 @@ const JobListCard = ({ jobList }) => {
         } catch (error) {
             alert(`Job 삭제 중 오류가 발생했습니다.`);
         }
-    }, []);
+    }, [user_id]);
 
     const handleRowClick = useCallback(async (jobId) => {
+        const job = jobListData.find(j => (j._id || j.id) === jobId);
+        // running 상태인 경우 log=true, 그 외는 log=false
+        const logParam = job && job.status === 'running' ? 'true' : 'false';
+        
         try {
-            const response = await fetch(`/api/jobs/${jobId}`);
+            const response = await fetch(`/user/${user_id}/jobs?job_id=${jobId}&log=${logParam}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const responseData = await response.json();
             if (responseData.code === 200 && responseData.data) {
@@ -144,13 +150,20 @@ const JobListCard = ({ jobList }) => {
                 };
                 setSelectedJobDetail(formattedData);
                 setDetailModalOpen(true);
+                
+                // log=true이고 로그 내용이 있으면 로그도 저장 (show logs 버튼 활성화용)
+                if (logParam === 'true' && responseData.log_content) {
+                    const logLines = responseData.log_content.split('\n').filter(line => line.trim() !== '');
+                    setCurrentJobLogs(logLines);
+                    setCurrentJobName(`Job ${jobId} - ${responseData.file_name || 'logs'}`);
+                }
             } else {
-                alert(`Job 상세 정보 불러오기에 실패했습니다.`);
+                alert(`Job 상세 정보 불러오기에 실패했습니다: ${responseData.message || '알 수 없는 오류'}`);
             }
         } catch (error) {
             alert(`Job 상세 정보 불러오기 중 오류 발생: ${error.message}`);
         }
-    }, [formatTimestamp]);
+    }, [formatTimestamp, jobListData, user_id]);
 
     const handleDetailModalClose = useCallback(() => {
         setDetailModalOpen(false);
