@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { IconButton, Dialog, DialogTitle, DialogContent, InputAdornment, TextField } from '@mui/material'; 
 import CloseIcon from '@mui/icons-material/Close';
-import { Clear as ClearIcon } from '@mui/icons-material';
+import { Clear as ClearIcon, FolderOpen as FolderOpenIcon } from '@mui/icons-material';
 import './Modal.css';
 import '../../components/Card/Card.css';
 
 import RoundedButton from "../Button/RoundedButton";
+import FileBrowserModal from './FileBrowserModal';
 
 const EditJobFormModal = ({ initialData, open, onClose, onSave }) => { 
     
@@ -13,6 +14,9 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
     const [projectPath, setProjectPath] = useState(initialData?.projectPath || '');
     const [venvPath, setVenvPath] = useState(initialData?.venvPath || '');
     const [mainFile, setMainFile] = useState(initialData?.mainFile || '');
+    
+    const [isFileBrowserOpen, setIsFileBrowserOpen] = useState(false);
+    const [currentPathField, setCurrentPathField] = useState(null);
 
     useEffect(() => {
         if (initialData) {
@@ -26,6 +30,36 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
     const handleClear = (setter) => () => {
         setter('');
     };
+    
+    const handleOpenFileBrowser = useCallback((field) => () => {
+        setCurrentPathField(field);
+        setIsFileBrowserOpen(true);
+    }, []);
+    
+    const handleCloseFileBrowser = useCallback(() => {
+        setIsFileBrowserOpen(false);
+        setCurrentPathField(null);
+    }, []);
+    
+    const handlePathSelect = useCallback((selectedPath) => {
+        const fieldMap = {
+            'project': 'projectPath',
+            'venv': 'venvPath',
+            'main': 'mainFile'
+        };
+        
+        const field = fieldMap[currentPathField];
+        if (field === 'projectPath') {
+            setProjectPath(selectedPath);
+        } else if (field === 'venvPath') {
+            setVenvPath(selectedPath);
+        } else if (field === 'mainFile') {
+            setMainFile(selectedPath);
+        }
+        
+        setIsFileBrowserOpen(false);
+        setCurrentPathField(null);
+    }, [currentPathField]);
 
     const handleSubmit = () => {
         const updatedData = {
@@ -91,8 +125,17 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 value={projectPath}
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
+                                    readOnly: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="open file browser"
+                                                onClick={handleOpenFileBrowser('project')}
+                                                edge="end"
+                                                size="small"
+                                            >
+                                                <FolderOpenIcon />
+                                            </IconButton>
                                             <IconButton
                                                 aria-label="clear project path"
                                                 onClick={handleClear(setProjectPath)}
@@ -104,7 +147,6 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                         </InputAdornment>
                                     ),
                                 }}
-                                onChange={(e) => setProjectPath(e.target.value)}
                             />
                             <TextField
                                 className="form-card-text-field"
@@ -114,8 +156,17 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 value={venvPath}
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
+                                    readOnly: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="open file browser"
+                                                onClick={handleOpenFileBrowser('venv')}
+                                                edge="end"
+                                                size="small"
+                                            >
+                                                <FolderOpenIcon />
+                                            </IconButton>
                                             <IconButton
                                                 aria-label="clear venv path"
                                                 onClick={handleClear(setVenvPath)}
@@ -127,7 +178,6 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                         </InputAdornment>
                                     ),
                                 }}
-                                onChange={(e) => setVenvPath(e.target.value)}
                             />
                             <TextField
                                 className="form-card-text-field"
@@ -137,8 +187,17 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 value={mainFile}
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
+                                    readOnly: true,
                                     endAdornment: (
                                         <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="open file browser"
+                                                onClick={handleOpenFileBrowser('main')}
+                                                edge="end"
+                                                size="small"
+                                            >
+                                                <FolderOpenIcon />
+                                            </IconButton>
                                             <IconButton
                                                 aria-label="clear main file"
                                                 onClick={handleClear(setMainFile)}
@@ -150,7 +209,6 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                         </InputAdornment>
                                     ),
                                 }}
-                                onChange={(e) => setMainFile(e.target.value)}
                             />
                         </form>
                         <div className="edit-job-button-container">
@@ -170,6 +228,16 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                     <p>작업 데이터를 불러오는 중...</p>
                 )}
             </DialogContent>
+            
+            <FileBrowserModal
+                isOpen={isFileBrowserOpen}
+                onClose={handleCloseFileBrowser}
+                onSelectPath={handlePathSelect}
+                currentPathField={currentPathField}
+                title={currentPathField === 'project' ? '프로젝트 폴더 선택' :
+                       currentPathField === 'venv' ? '가상환경 폴더 선택' :
+                       currentPathField === 'main' ? '메인 파일 선택' : '파일 탐색기'}
+            />
         </Dialog>
     );
 }

@@ -51,7 +51,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1400; /* Material-UI Dialog (1300)보다 높게 설정 */
 }
 
 .file-browser-modal {
