@@ -9,7 +9,7 @@ import EditJobFormModal from "../Modal/EditJobFormModal";
 import JobDetailModal from '../Modal/JobDetailModal';
 
 const JobListCard = ({ jobList }) => {
-    const {user_id} = useUser();
+    const { user_id } = useUser();
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [jobToEdit, setJobToEdit] = useState(null);
     const [detailModalOpen, setDetailModalOpen] = useState(false);

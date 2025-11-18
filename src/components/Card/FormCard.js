@@ -9,7 +9,7 @@ import ConfirmModal from '../Modal/ConfirmModal';
 import FileBrowserModal from '../Modal/FileBrowserModal';
 
 const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
-    const {user_id} = useUser();
+    const { user_id } = useUser();
     const [formData, setFormData] = useState({
         jobName: '',
         projectPath: '',
