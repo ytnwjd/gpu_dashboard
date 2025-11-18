@@ -132,13 +132,15 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                 onChange={(e) => updateFormData('jobName', e.target.value)}
             />
             <TextField
-                className="form-card-text-field"
+                className="form-card-text-field form-card-readonly-field"
                 label="프로젝트 folder path"
                 variant="outlined"
                 fullWidth
                 value={formData.projectPath}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
+                    readOnly: true,
+                    style: { cursor: 'not-allowed' },
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
@@ -160,16 +162,17 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => updateFormData('projectPath', e.target.value)}
             />
             <TextField
-                className="form-card-text-field"
+                className="form-card-text-field form-card-readonly-field"
                 label="venv folder path"
                 variant="outlined"
                 fullWidth
                 value={formData.venvPath}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
+                    readOnly: true,
+                    style: { cursor: 'not-allowed' },
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
@@ -191,16 +194,17 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => updateFormData('venvPath', e.target.value)}
             />
             <TextField
-                className="form-card-text-field"
+                className="form-card-text-field form-card-readonly-field"
                 label="main file (ex. index.py)"
                 variant="outlined"
                 fullWidth
                 value={formData.mainFile}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
+                    readOnly: true,
+                    style: { cursor: 'not-allowed' },
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
@@ -222,7 +226,6 @@ const FormCard = ({ onJobSubmitSuccess, gpuInfo }) => {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => updateFormData('mainFile', e.target.value)}
             />
         </form>
     );

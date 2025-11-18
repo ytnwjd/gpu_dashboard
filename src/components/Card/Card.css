@@ -138,6 +138,15 @@
     background-color: rgba(25, 118, 210, 0.08);
 }
 
+/* ReadOnly 필드 */
+.form-card-readonly-field .MuiInputBase-root {
+    cursor: not-allowed !important;
+}
+
+.form-card-readonly-field .MuiInputBase-input {
+    cursor: not-allowed !important;
+}
+
 /* ===== 정보 카드 스타일 ===== */
 .info-content-wrapper {
     display: flex;

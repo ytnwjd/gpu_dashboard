@@ -118,7 +118,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 onChange={(e) => setJobName(e.target.value)}
                             />
                             <TextField
-                                className="form-card-text-field"
+                                className="form-card-text-field form-card-readonly-field"
                                 label="프로젝트 folder path"
                                 variant="standard"
                                 fullWidth
@@ -126,6 +126,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
                                     readOnly: true,
+                                    style: { cursor: 'not-allowed' },
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <IconButton
@@ -149,7 +150,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 }}
                             />
                             <TextField
-                                className="form-card-text-field"
+                                className="form-card-text-field form-card-readonly-field"
                                 label="venv folder path"
                                 variant="standard"
                                 fullWidth
@@ -157,6 +158,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
                                     readOnly: true,
+                                    style: { cursor: 'not-allowed' },
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <IconButton
@@ -180,7 +182,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 }}
                             />
                             <TextField
-                                className="form-card-text-field"
+                                className="form-card-text-field form-card-readonly-field"
                                 label="main file (ex. index.py)"
                                 variant="standard"
                                 fullWidth
@@ -188,6 +190,7 @@ const EditJobFormModal = ({ initialData, open, onClose, onSave }) => {
                                 InputLabelProps={{ shrink: true }}
                                 InputProps={{
                                     readOnly: true,
+                                    style: { cursor: 'not-allowed' },
                                     endAdornment: (
                                         <InputAdornment position="end">
                                             <IconButton
